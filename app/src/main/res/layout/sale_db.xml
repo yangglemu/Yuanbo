@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorLine"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <View style="@style/verLine_header"/>
+        <TextView
+                android:id="@+id/sale_db_header_id"
+                style="@style/listHeaderStyle"
+                android:layout_weight="1"
+                android:text="行号"/>
+        <View style="@style/verLine_header"/>
+        <TextView
+                android:id="@+id/sale_db_header_rq"
+                style="@style/listHeaderStyle"
+                android:layout_weight="3"
+                android:text="日期"/>
+        <View style="@style/verLine_header"/>
+        <TextView
+                android:id="@+id/sale_db_header_sl"
+                style="@style/listHeaderStyle"
+                android:layout_weight="1"
+                android:text="数量"/>
+        <View style="@style/verLine_header"/>
+        <TextView
+                android:id="@+id/sale_db_header_je"
+                style="@style/listHeaderStyle"
+                android:layout_weight="1.5"
+                android:text="金额 "/>
+        <View style="@style/verLine_header"/>
+
+    </LinearLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorLine"/>
+    <ListView
+            android:id="@+id/listView_sale_db"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerHeight="0.5dp"
+            android:divider="@color/colorLine"
+            android:listSelector="@color/colorAccent"/>
+
+    <View android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/colorLine"/>
+
+</LinearLayout>

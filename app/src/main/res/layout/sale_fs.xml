@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="@color/colorLine"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <View style="@style/verLine_header"/>
+        <TextView
+                style="@style/listHeaderStyle"
+                android:layout_weight="3"
+                android:text="时间段"/>
+        <View style="@style/verLine_header"/>
+        <TextView
+                style="@style/listHeaderStyle"
+                android:layout_weight="1"
+                android:text="来客数"/>
+        <View style="@style/verLine_header"/>
+        <TextView
+                style="@style/listHeaderStyle"
+                android:layout_weight="1"
+                android:text="营业额"/>
+        <View style="@style/verLine_header"/>
+        <TextView
+                style="@style/listHeaderStyle"
+                android:layout_weight="1"
+                android:text="客单价"/>
+        <View style="@style/verLine_header"/>
+
+    </LinearLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorLine"/>
+    <ListView
+            android:id="@+id/listView_sale_fs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerHeight="0.5dp"
+            android:divider="@color/colorLine"
+            android:listSelector="@color/colorAccent"/>
+
+    <View android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/colorLine"/>
+
+</LinearLayout>

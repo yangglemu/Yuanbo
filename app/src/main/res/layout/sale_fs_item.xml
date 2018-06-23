@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+    <View style="@style/verLine_item"/>
+    <TextView
+            android:id="@+id/sale_fs_sjd"
+            style="@style/listItemStyle"
+            android:layout_weight="3"/>
+    <View style="@style/verLine_item"/>
+    <TextView
+            android:id="@+id/sale_fs_lks"
+            style="@style/listItemStyle"
+            android:layout_weight="1"/>
+    <View style="@style/verLine_item"/>
+
+    <TextView
+            android:id="@+id/sale_fs_yye"
+            style="@style/listItemStyle"
+            android:layout_weight="1"/>
+    <View style="@style/verLine_item"/>
+
+    <TextView
+            android:id="@+id/sale_fs_kdj"
+            style="@style/listItemStyle"
+            android:layout_weight="1"/>
+    <View style="@style/verLine_item"/>
+</LinearLayout>
