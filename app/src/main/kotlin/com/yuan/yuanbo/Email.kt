@@ -33,7 +33,6 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         val mailBox = "yangglemu@163.com"
         val subject = "sunshine"
         const val url = "jdbc:mysql://pc201408020832:3306/duobao?user=root&password=yuanbo960502"
-
     }
 
     fun send(content: String) {
