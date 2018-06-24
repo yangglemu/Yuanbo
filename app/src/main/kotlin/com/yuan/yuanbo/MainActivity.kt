@@ -166,9 +166,11 @@ class MainActivity : Activity() {
         val sql = "delete from mail where date(rq)<'$date'"
         try {
             db.execSQL(sql)
-            db.close()
         }catch (e:SQLiteException){
             toast("退出程序时清理出错!"+e.message)
+        }
+        finally {
+            db.close()
         }
         super.onDestroy()
     }

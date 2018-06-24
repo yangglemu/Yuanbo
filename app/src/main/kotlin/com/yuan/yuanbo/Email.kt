@@ -5,18 +5,13 @@ import android.database.sqlite.SQLiteDatabase
 import com.sun.mail.pop3.POP3Folder
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
-import java.io.ByteArrayOutputStream
 import java.io.StringReader
-import java.sql.DriverManager
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.mail.*
-import javax.mail.internet.InternetAddress
-import javax.mail.internet.MimeMessage
+import javax.mail.Flags
+import javax.mail.Folder
+import javax.mail.Session
 import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
 
 fun Date.toString(formatString: String): String {
     return SimpleDateFormat(formatString, Locale.CHINA).format(this)
@@ -24,17 +19,13 @@ fun Date.toString(formatString: String): String {
 
 class Email(val context: Context, val db: SQLiteDatabase) {
     companion object {
-        val smtpHost = "smtp.126.com"
-        val pop3Host = "pop.126.com"
-        val smtpPort = 465
-        val pop3Port = 995
-        val username = "yangglemu"
-        val password = "yuanbo132"
-        val mailBox = "yangglemu@126.com"
-        val subject = "sunshine"
-        const val url = "jdbc:mysql://pc201408020832:3306/duobao?user=root&password=yuanbo960502"
+        const val pop3Host = "pop.126.com"
+        const val pop3Port = 995
+        const val username = "yangglemu"
+        const val password = "yuanbo132"
     }
 
+    /*
     fun send(content: String) {
         val p = Properties()
         //p.put("mail.smtp.ssl.enable", false)
@@ -51,6 +42,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         msg.setText(content)
         Transport.send(msg)
     }
+*/
 
     fun receive() {
         val p = Properties()
@@ -61,39 +53,51 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         val store = session.getStore("pop3")
         store.connect(username, password)
         val folder = store.getFolder("INBOX") as POP3Folder
-        folder.open(Folder.READ_ONLY)
+        folder.open(Folder.READ_WRITE)
+        var total = folder.messages.size
+        var del = 0
+        var read = 0
         for (msg in folder.messages) {
-            if (msg.subject != subject) continue
+            val buffer = msg.subject.split('@')
+            if (buffer.size != 2) {
+                msg.setFlag(Flags.Flag.DELETED, true)
+                del++
+                continue
+            }
+            if (!isInShops(buffer[0])) {
+                msg.setFlag(Flags.Flag.DELETED, true)
+                del++
+                continue
+            }
             val uid = folder.getUID(msg)
             if (isNewMessage(uid)) {
                 insertIntoDatabase(msg.content.toString())
-                db.execSQL("insert into history(uid,rq) values('$uid','${Date().toString("yyyy-MM-dd HH:mm:ss")}')")
+                db.execSQL("insert into mail(uid,rq) values('$uid','${buffer[1]}')")
+                read++
             }
         }
         folder.close(false)
         store.close()
     }
 
-    fun insertIntoDatabase(content: String) {
+    private fun insertIntoDatabase(content: String) {
         val doc = string2Document(content)
         val root = doc.documentElement
-        val goods = root.getElementsByTagName("goods").item(0).childNodes
-        val sale_mx = root.getElementsByTagName("sale_mx").item(0).childNodes
-        val sale_db = root.getElementsByTagName("sale_db").item(0).childNodes
-
-        if (goods.length > 0) {
-            for (index in 0..goods.length - 1) {
-                val attr = goods.item(index).attributes
+        val good = root.getElementsByTagName("goods").item(0).childNodes
+        val sale_db = root.getElementsByTagName("sale_dbs").item(0).childNodes
+        val sale_mx = root.getElementsByTagName("sale_mxs").item(0).childNodes
+        if (good.length > 0) {
+            for (index in 0 until good.length - 1) {
+                val attr = good.item(index).attributes
                 val tm = attr.getNamedItem("tm").nodeValue
-                val sj = tm
                 val sl = attr.getNamedItem("sl").nodeValue
-                val zq = "1.00"
-                db.execSQL("replace into goods (tm,sj,zq,sl) values('$tm',$sj,$zq,$sl)")
+                val shop = attr.getNamedItem("shop").nodeValue
+                db.execSQL("replace into goods (tm,sl,shop) values($tm,$sl,$shop)")
             }
         }
 
         if (sale_db.length > 0) {
-            for (index in 0..sale_db.length - 1) {
+            for (index in 0 until sale_db.length - 1) {
                 val attr = sale_db.item(index).attributes
                 val rq = attr.getNamedItem("rq").nodeValue
                 val sl = attr.getNamedItem("sl").nodeValue
@@ -103,7 +107,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         }
 
         if (sale_mx.length > 0) {
-            for (index in 0..sale_mx.length - 1) {
+            for (index in 0 until sale_mx.length - 1) {
                 val attr = sale_mx.item(index).attributes
                 val id = attr.getNamedItem("id").nodeValue
                 val rq = attr.getNamedItem("rq").nodeValue
@@ -116,24 +120,36 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         }
     }
 
-    fun string2Document(content: String): Document {
+    private fun string2Document(content: String): Document {
         val reader = StringReader(content)
         val stream = InputSource(reader)
         val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream)
         return doc
     }
 
-    fun isNewMessage(uid: String): Boolean {
-        var value = true
-        val cursor = db.rawQuery("select count(*) as count from history where uid='$uid'", null)
+    private fun isInShops(shop: String): Boolean {
+        var value = false
+        val cursor = db.rawQuery("select count(*) as count from shop where shop='$shop'", null)
         if (cursor.moveToNext()) {
             val count = cursor.getInt(0)
-            if (count > 0) value = false
+            if (count == 1) value = true
         }
         cursor.close()
         return value
     }
 
+    private fun isNewMessage(uid: String): Boolean {
+        var value = true
+        val cursor = db.rawQuery("select count(*) as count from mail where uid='$uid'", null)
+        if (cursor.moveToNext()) {
+            val count = cursor.getInt(0)
+            if (count == 1) value = false
+        }
+        cursor.close()
+        return value
+    }
+
+/*
     fun getXmlContent(date: Date): String {
         val formatString = "yyyy-MM-dd"
         val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
@@ -200,5 +216,6 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         stream.close()
         return content
     }
+*/
 
 }
