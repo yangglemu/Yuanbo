@@ -37,7 +37,7 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
         val date = Date()
-        createListLayout(R.layout.sale_fl, R.id.listView_sale_fl, SaleFLAdapter(this, db, date, date))
+        createListLayout(R.layout.goods, R.id.listView_goods, SaleFLAdapter(this, db, date, date))
     }
 
     fun createListLayout(layoutId: Int, listViewId: Int, adapter: DataAdapter) {
@@ -66,7 +66,7 @@ class MainActivity : Activity() {
                 toast("本日销售明细")
             }
             R.id.db -> {
-                var date = Date()
+                val date = Date()
                 val adapter = SaleDBAdapter(this, db, date, date)
                 createListLayout(R.layout.sale_db, R.id.listView_sale_db, adapter)
                 toast("本日销售单笔")
@@ -163,7 +163,7 @@ class MainActivity : Activity() {
         c.time = Date()
         c.add(Calendar.DAY_OF_MONTH, -29)
         val date = c.time.toString(formatString)
-        val sql = "delete from history where date(rq)<'$date'"
+        val sql = "delete from mail where date(rq)<'$date'"
         try {
             db.execSQL(sql)
             db.close()

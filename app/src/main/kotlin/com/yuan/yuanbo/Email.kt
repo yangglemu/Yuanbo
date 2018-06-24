@@ -24,13 +24,13 @@ fun Date.toString(formatString: String): String {
 
 class Email(val context: Context, val db: SQLiteDatabase) {
     companion object {
-        val smtpHost = "smtp.163.com"
-        val pop3Host = "pop.163.com"
+        val smtpHost = "smtp.126.com"
+        val pop3Host = "pop.126.com"
         val smtpPort = 465
         val pop3Port = 995
         val username = "yangglemu"
         val password = "yuanbo132"
-        val mailBox = "yangglemu@163.com"
+        val mailBox = "yangglemu@126.com"
         val subject = "sunshine"
         const val url = "jdbc:mysql://pc201408020832:3306/duobao?user=root&password=yuanbo960502"
     }

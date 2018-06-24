@@ -14,22 +14,22 @@ import java.util.*
 
 class MyDatePicker(context: Context?, theme: Int, postMsg: MainActivity.IPostMessage) : Dialog(context, theme), DatePicker.OnDateChangedListener {
     companion object {
-        val formatString = "yyyy-MM-dd"
+        const val formatString = "yyyy-MM-dd"
     }
 
-    val postMessage = postMsg
+    private val postMessage = postMsg
 
-    val datePickerStart: DatePicker by lazy {
-        findViewById(R.id.datePickerStart) as DatePicker
+    private val datePickerStart: DatePicker by lazy {
+        findViewById<DatePicker>(R.id.datePickerStart)
     }
-    val datePickerEnd: DatePicker by lazy {
-        findViewById(R.id.datePickerEnd) as DatePicker
+    private val datePickerEnd: DatePicker by lazy {
+        findViewById<DatePicker>(R.id.datePickerEnd)
     }
-    val buttonOK: Button by lazy {
-        findViewById(R.id.buttonOK) as Button
+    private val buttonOK: Button by lazy {
+        findViewById<Button>(R.id.buttonOK)
     }
-    val buttonCancel: Button by lazy {
-        findViewById(R.id.buttonCancel) as Button
+    private val buttonCancel: Button by lazy {
+        findViewById<Button>(R.id.buttonCancel)
     }
     lateinit var dateStart: Date
     lateinit var dateEnd: Date
@@ -46,8 +46,8 @@ class MyDatePicker(context: Context?, theme: Int, postMsg: MainActivity.IPostMes
         datePickerStart.init(year, month, day, this)
         datePickerEnd.init(year, month, day, this)
         buttonOK.setOnClickListener {
-            this.dismiss()
-            this.postMessage.postMessage(dateStart, dateEnd)
+            this@MyDatePicker.dismiss()
+            this@MyDatePicker.postMessage.postMessage(dateStart, dateEnd)
         }
         buttonCancel.setOnClickListener { dismiss() }
     }
