@@ -12,21 +12,23 @@ import java.util.*
 class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(context, sqlite) {
 
     override fun initData() {
-        val cursor = db.rawQuery("select tm,sl from goods where sl>0 order by sj asc", null)
+        val cursor = db.rawQuery("select tm,sl,shop from goods where sl>0 order by sj,shop asc", null)
         var id = 0
+        var tm: Int
         var sl: Int
-        var sj: Int
         var je: Int
+        var shop: String
         while (cursor.moveToNext()) {
             val map: HashMap<String, String> = HashMap()
+            tm = cursor.getInt(0)
             sl = cursor.getInt(1)
-            sj = cursor.getInt(0)
+            shop = cursor.getString(2)
             map["id"] = (++id).toString()
-            map["tm"] = sj.toString() + ".00"
+            map["tm"] = tm.toString() + ".00"
             map["sl"] = sl.toString()
-            map["zq"] = "1.00"
-            je = sl * sj
+            je = sl * tm
             map["je"] = decimalFormatter.format(je)
+            map["shop"] = shop
             mData.add(map)
         }
         cursor.close()
@@ -39,8 +41,8 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
         map["id"] = "合计"
         map["tm"] = ""
         map["sl"] = sum_sl.toString()
-        map["zq"] = ""
         map["je"] = decimalFormatter.format(sum_je)
+        map["shop"] = ""
         mData.add(map)
     }
 
@@ -48,13 +50,13 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
         //val id = v.findViewById(R.id.goods_header_id)
         val tm = v.findViewById(R.id.goods_header_tm) as TextView
         val sl = v.findViewById(R.id.goods_header_sl) as TextView
-        val zq = v.findViewById(R.id.goods_header_zq) as TextView
         val je = v.findViewById(R.id.goods_header_je) as TextView
+        //val shop = v.findViewById(R.id.goods_header_zq) as TextView
 
         setClick(tm, "tm")
         setClick(sl, "sl")
-        setClick(zq, "zq")
         setClick(je, "je")
+        //setClick(shop, "shop")
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
@@ -68,12 +70,12 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
             v = convertView
             holder = v.tag as ViewHolder
         }
-        var map = mData[position]
+        val map = mData[position]
         holder.id.text = map["id"]
         holder.tm.text = map["tm"]
         holder.sl.text = map["sl"]
-        holder.zq.text = map["zq"]
         holder.je.text = map["je"]
+        holder.shop.text = map["shop"]
         return v
     }
 
@@ -81,7 +83,7 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
         var id = v.findViewById(R.id.goods_id) as TextView
         var tm = v.findViewById(R.id.goods_tm) as TextView
         var sl = v.findViewById(R.id.goods_sl) as TextView
-        var zq = v.findViewById(R.id.goods_zq) as TextView
         var je = v.findViewById(R.id.goods_je) as TextView
+        var shop = v.findViewById(R.id.goods_shop) as TextView
     }
 }

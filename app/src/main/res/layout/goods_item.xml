@@ -7,28 +7,26 @@
     <TextView
             android:id="@+id/goods_id"
             style="@style/listItemStyle"
-            android:layout_weight="1"/>
+            android:layout_weight="0.8"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/goods_tm"
            style="@style/listItemStyle"
-            android:layout_weight="1.5"/>
+            android:layout_weight="0.8"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/goods_sl"
             style="@style/listItemStyle"
-            android:layout_weight="1"/>
+            android:layout_weight="0.8"/>
     <View style="@style/verLine_item"/>
-
-    <TextView
-            android:id="@+id/goods_zq"
-            style="@style/listItemStyle"
-            android:layout_weight="1"/>
-    <View style="@style/verLine_item"/>
-
     <TextView
             android:id="@+id/goods_je"
             style="@style/listItemStyle"
-            android:layout_weight="2"/>
+            android:layout_weight="1"/>
+    <View style="@style/verLine_item"/>
+    <TextView
+            android:id="@+id/goods_shop"
+            style="@style/listItemStyle"
+            android:layout_weight="1.6"/>
     <View style="@style/verLine_item"/>
 </LinearLayout>

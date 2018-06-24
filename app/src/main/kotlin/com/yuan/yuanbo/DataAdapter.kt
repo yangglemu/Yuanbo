@@ -49,7 +49,9 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
                     } else {
                         mData.sortByDescending {
                             val df: SimpleDateFormat
-                            if (it[name]?.length == 10) df = dateFormatter
+                            if (it[name]?.length == 10) {
+                                df = dateFormatter
+                            }
                             else df = dateTimeFormatter
                             df.parse(it[name])
                         }
