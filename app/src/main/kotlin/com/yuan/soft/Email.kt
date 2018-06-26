@@ -1,4 +1,4 @@
-package com.yuan.yuanbo
+package com.yuan.soft
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -23,6 +23,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         const val pop3Port = 995
         const val username = "yangglemu"
         const val password = "yuanbo132"
+        const val shops = HashMap<String, String>()
     }
 
     /*
@@ -64,6 +65,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 del++
                 continue
             }
+
             if (!isInShops(buffer[0])) {
                 msg.setFlag(Flags.Flag.DELETED, true)
                 del++
@@ -80,34 +82,40 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         store.close()
     }
 
-    private fun insertIntoDatabase(content: String) {
+    private fun insertIntoDatabase(content: String, date: Date) {
         val doc = string2Document(content)
         val root = doc.documentElement
+        val shop = root.tagName
         val good = root.getElementsByTagName("goods").item(0).childNodes
         val sale_db = root.getElementsByTagName("sale_dbs").item(0).childNodes
         val sale_mx = root.getElementsByTagName("sale_mxs").item(0).childNodes
+        var sql = "delete from goods where shop=$shop"
+        db.execSQL(sql)
         if (good.length > 0) {
-            for (index in 0 until good.length - 1) {
+            for (index in 0 until good.length) {
                 val attr = good.item(index).attributes
                 val tm = attr.getNamedItem("tm").nodeValue
                 val sl = attr.getNamedItem("sl").nodeValue
-                val shop = attr.getNamedItem("shop").nodeValue
-                db.execSQL("replace into goods (tm,sl,shop) values($tm,$sl,$shop)")
+                db.execSQL("insert into goods (tm,sl,shop) values($tm,$sl,$shop)")
             }
         }
 
         if (sale_db.length > 0) {
-            for (index in 0 until sale_db.length - 1) {
+            for (index in 0 until sale_db.length) {
                 val attr = sale_db.item(index).attributes
-                val rq = attr.getNamedItem("rq").nodeValue
+                val djh = attr.getNamedItem("djh").nodeValue
                 val sl = attr.getNamedItem("sl").nodeValue
                 val je = attr.getNamedItem("je").nodeValue
+                val ss = attr.getNamedItem("ss").nodeValue
+                val zl = attr.getNamedItem("zl").nodeValue
+                val syy = attr.getNamedItem("syy").nodeValue
+                val rq = "${djh.subSequence(0, 4)}-${djh.subSequence(4, 2)}-${djh.subSequence(6, 2)} ${djh.subSequence(8, 2)}:${djh.subSequence(10, 2)}:${djh.subSequence(12, 2)}"
                 db.execSQL("replace into sale_db (rq,sl,je) values('$rq',$sl,$je)")
             }
         }
 
         if (sale_mx.length > 0) {
-            for (index in 0 until sale_mx.length - 1) {
+            for (index in 0 until sale_mx.length) {
                 val attr = sale_mx.item(index).attributes
                 val id = attr.getNamedItem("id").nodeValue
                 val rq = attr.getNamedItem("rq").nodeValue

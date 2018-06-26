@@ -5,7 +5,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "28.0.0"
     defaultConfig {
-        applicationId "com.yuan.yuanbo"
+        applicationId "com.yuan.soft"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1

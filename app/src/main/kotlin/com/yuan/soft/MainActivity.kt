@@ -1,4 +1,4 @@
-package com.yuan.yuanbo
+package com.yuan.soft
 
 import android.app.Activity
 import android.database.sqlite.SQLiteDatabase
