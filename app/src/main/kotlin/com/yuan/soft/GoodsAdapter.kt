@@ -77,7 +77,7 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
         return v
     }
 
-    private class ViewHolder(var v: View) {
+    private class ViewHolder(v: View) {
         var id = v.findViewById(R.id.goods_id) as TextView
         var tm = v.findViewById(R.id.goods_tm) as TextView
         var sl = v.findViewById(R.id.goods_sl) as TextView

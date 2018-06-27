@@ -34,7 +34,7 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
 
     fun setClick(tv: View, name: String) {
         tv.setOnClickListener {
-            val lastMap = mData[mData.size - 1]
+            val lastMap = mData.last()
             mData.remove(lastMap)
             when (name) {
                 "rq" -> {
@@ -48,11 +48,7 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
                         tv.tag = "desc"
                     } else {
                         mData.sortByDescending {
-                            val df: SimpleDateFormat
-                            if (it[name]?.length == 10) {
-                                df = dateFormatter
-                            }
-                            else df = dateTimeFormatter
+                            val df: SimpleDateFormat = if (it[name]?.length == 10) dateFormatter else dateTimeFormatter
                             df.parse(it[name])
                         }
                         tv.tag = "asc"
@@ -77,7 +73,7 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
                     }
                 }
             }
-            for (index in 0 until mData.size - 1) {
+            for (index in 0 until mData.size) {
                 mData[index]["id"] = (index + 1).toString()
             }
             mData.add(lastMap)

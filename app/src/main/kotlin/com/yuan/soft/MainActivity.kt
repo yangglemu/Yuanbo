@@ -25,6 +25,7 @@ class MainActivity : Activity() {
     val mainLayout: LinearLayout by lazy {
         findViewById<LinearLayout>(R.id.mainLayout)
     }
+
     lateinit var listLayout: View
     lateinit var listView: ListView
     var timer: Timer? = null
@@ -36,8 +37,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        val date = Date()
-        createListLayout(R.layout.goods, R.id.listView_goods, SaleFLAdapter(this, db, date, date))
+        createListLayout(R.layout.goods, R.id.listView_goods, GoodsAdapter(this, db))
     }
 
     fun createListLayout(layoutId: Int, listViewId: Int, adapter: DataAdapter) {
