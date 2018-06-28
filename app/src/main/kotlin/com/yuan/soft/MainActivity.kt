@@ -22,7 +22,7 @@ class MainActivity : Activity() {
     val email: Email by lazy {
         Email(this, db)
     }
-    val mainLayout: LinearLayout by lazy {
+    private val mainLayout: LinearLayout by lazy {
         findViewById<LinearLayout>(R.id.mainLayout)
     }
 
@@ -58,7 +58,6 @@ class MainActivity : Activity() {
         when (item.itemId) {
             R.id.sp -> {
                 createListLayout(R.layout.goods, R.id.listView_goods, GoodsAdapter(this, db))
-
                 toast("商品资料")
             }
             R.id.mx -> {
