@@ -48,6 +48,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         var total = folder.messages.size
         var del = 0
         var read = 0
+        var newShop = 0
         for (msg in folder.messages) {
             val buffer = msg.subject.split('@')
             if (buffer.size != 2) {
@@ -57,8 +58,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
             }
 
             if (!isInShops(buffer[0])) {
-                //msg.setFlag(Flags.Flag.DELETED, true)
-                //del++
+                newShop++
                 continue
             }
             val uid = folder.getUID(msg)
@@ -68,6 +68,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 read++
             }
         }
+        (context as MainActivity).toast("total:$total,del:$del,newShop:$newShop,read:$read")
         folder.close(false)
         store.close()
     }
@@ -80,14 +81,14 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         val sale_db = root.getElementsByTagName("sale_db")
         val sale_mx = root.getElementsByTagName("sale_mx")
 
-        var sql = "delete from goods where shop=$shop"
+        var sql = "delete from goods where shop='$shop'"
         db.execSQL(sql)
         if (good.length > 0) {
             for (index in 0 until good.length) {
                 val attr = good.item(index).attributes
                 val tm = attr.getNamedItem("tm").nodeValue
                 val sl = attr.getNamedItem("sl").nodeValue
-                db.execSQL("insert into goods (tm,sl,shop) values($tm,$sl,$shop)")
+                db.execSQL("insert into goods (tm,sl,shop) values($tm,$sl,'$shop')")
             }
         }
 
@@ -118,7 +119,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 val zq = attr.getNamedItem("zq").nodeValue
                 val je = attr.getNamedItem("je").nodeValue
                 val rq = "${djh.subSequence(0, 4)}-${djh.subSequence(4, 2)}-${djh.subSequence(6, 2)} ${djh.subSequence(8, 2)}:${djh.subSequence(10, 2)}:${djh.subSequence(12, 2)}"
-                db.execSQL("insert into sale_mx (djh,tm,sl,zq,je,shop,rq) values('$djh','$tm',$sl,$zq,$je,'$shop','$rq')")
+                db.execSQL("insert into sale_mx (djh,tm,sl,zq,je,shop,rq) values('$djh',$tm,$sl,$zq,$je,'$shop','$rq')")
             }
         }
     }
@@ -132,7 +133,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
 
     private fun isInShops(shop: String): Boolean {
         var value = false
-        val cursor = db.rawQuery("select count(*) as count from shop where shop='$shop'", null)
+        val cursor = db.rawQuery("select count(*) as count from shop where pname='$shop'", null)
         if (cursor.moveToNext()) {
             val count = cursor.getInt(0)
             if (count == 1) value = true

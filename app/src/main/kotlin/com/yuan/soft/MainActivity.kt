@@ -126,11 +126,11 @@ class MainActivity : Activity() {
                 timer?.schedule(object : TimerTask() {
                     override fun run() {
                         try {
-                            email.receive()
                             Looper.prepare()
+                            email.receive()
                             toast("同步数据成功！")
                             Looper.loop()
-                        } catch(e: Exception) {
+                        } catch (e: Exception) {
                             Looper.prepare()
                             toast("接受邮件错误:\r\n" + e.message)
                             Looper.loop()
@@ -154,7 +154,7 @@ class MainActivity : Activity() {
     }
 
     fun toast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroy() {
@@ -165,10 +165,9 @@ class MainActivity : Activity() {
         val sql = "delete from mail where date(rq)<'$date'"
         try {
             db.execSQL(sql)
-        }catch (e:SQLiteException){
-            toast("退出程序时清理出错!"+e.message)
-        }
-        finally {
+        } catch (e: SQLiteException) {
+            toast("退出程序时清理出错!" + e.message)
+        } finally {
             db.close()
         }
         super.onDestroy()
