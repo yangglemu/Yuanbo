@@ -1,21 +1,19 @@
 package com.yuan.soft
 
-import android.app.Activity
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.PopupMenu
 import android.widget.Toast
 import java.util.*
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
     val db: SQLiteDatabase by lazy {
         DbHelper(this).writableDatabase
     }
@@ -145,12 +143,6 @@ class MainActivity : Activity() {
             else -> return false
         }
         return true
-    }
-
-    fun showPopupMenu(v: View) {
-        val menu = PopupMenu(this, v)
-        menuInflater.inflate(R.menu.main, menu.menu)
-        menu.show()
     }
 
     fun toast(msg: String) {
