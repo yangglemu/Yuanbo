@@ -1,6 +1,7 @@
 package com.yuan.soft
 
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -14,10 +15,10 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
     override fun initData() {
         val cursor = db.rawQuery("select tm,sl,shop from goods where sl>0 order by tm,shop asc", null)
         var id = 0
-        var tm: Int
-        var sl: Int
-        var je: Int
-        var shop: String
+        var tm = 0
+        var sl = 0
+        var je = 0
+        var shop = ""
         while (cursor.moveToNext()) {
             val map: HashMap<String, String> = HashMap()
             tm = cursor.getInt(0)
@@ -32,6 +33,7 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
             mData.add(map)
         }
         cursor.close()
+        Log.i("yangglemu", "id:$id,tm:$tm,sl:$sl,je:$je,shop:$shop")
     }
 
     override fun compute() {

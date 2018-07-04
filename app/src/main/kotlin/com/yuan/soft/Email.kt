@@ -2,7 +2,9 @@ package com.yuan.soft
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import com.sun.mail.pop3.POP3Folder
+import com.yuan.soft.R.id.db
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import java.io.StringReader
@@ -20,7 +22,7 @@ fun Date.toString(formatString: String): String {
 class Email(val context: Context, val db: SQLiteDatabase) {
     companion object {
         const val pop3Host = "pop.126.com"
-        const val pop3Port = 995
+        const val pop3Port = "110"
         const val username = "yangglemu"
         const val password = "yuanbo132"
         val shops = HashMap<String, String>()
@@ -37,15 +39,14 @@ class Email(val context: Context, val db: SQLiteDatabase) {
 
     fun receive() {
         val p = Properties()
-        p["mail.pop3.ssl.enable"] = true
-        p["mail.pop3.host"] = pop3Host
-        p["mail.pop3.port"] = pop3Port
+        p["mail.pop3.host"]= pop3Host
+        p["mail.pop3.port"]= pop3Port
         val session = Session.getInstance(p)
         val store = session.getStore("pop3")
         store.connect(username, password)
         val folder = store.getFolder("INBOX") as POP3Folder
         folder.open(Folder.READ_WRITE)
-        var total = folder.messages.size
+        val total = folder.messages.size
         var del = 0
         var read = 0
         var newShop = 0
@@ -56,7 +57,6 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 del++
                 continue
             }
-
             if (!isInShops(buffer[0])) {
                 newShop++
                 continue
@@ -68,7 +68,6 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 read++
             }
         }
-        (context as MainActivity).toast("total:$total,del:$del,newShop:$newShop,read:$read")
         folder.close(false)
         store.close()
     }
@@ -103,7 +102,8 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 val ss = attr.getNamedItem("ss").nodeValue
                 val zl = attr.getNamedItem("zl").nodeValue
                 val syy = attr.getNamedItem("syy").nodeValue
-                val rq = "${djh.subSequence(0, 4)}-${djh.subSequence(4, 2)}-${djh.subSequence(6, 2)} ${djh.subSequence(8, 2)}:${djh.subSequence(10, 2)}:${djh.subSequence(12, 2)}"
+                // 20180101121314
+                val rq = "${djh.subSequence(0, 4)}-${djh.subSequence(4, 6)}-${djh.subSequence(6, 8)} ${djh.subSequence(8, 10)}:${djh.subSequence(10, 12)}:${djh.subSequence(12, 14)}"
                 db.execSQL("insert into sale_db (djh,sl,je,ss,zl,syy,rq,shop) values('$djh',$sl,$je,$ss,$zl,'$syy','$rq','$shop')")
             }
         }
@@ -118,7 +118,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 val sl = attr.getNamedItem("sl").nodeValue
                 val zq = attr.getNamedItem("zq").nodeValue
                 val je = attr.getNamedItem("je").nodeValue
-                val rq = "${djh.subSequence(0, 4)}-${djh.subSequence(4, 2)}-${djh.subSequence(6, 2)} ${djh.subSequence(8, 2)}:${djh.subSequence(10, 2)}:${djh.subSequence(12, 2)}"
+                val rq = "${djh.subSequence(0, 4)}-${djh.subSequence(4, 6)}-${djh.subSequence(6, 8)} ${djh.subSequence(8, 10)}:${djh.subSequence(10, 12)}:${djh.subSequence(12, 14)}"
                 db.execSQL("insert into sale_mx (djh,tm,sl,zq,je,shop,rq) values('$djh',$tm,$sl,$zq,$je,'$shop','$rq')")
             }
         }

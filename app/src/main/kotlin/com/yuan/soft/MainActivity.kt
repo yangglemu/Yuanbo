@@ -1,19 +1,24 @@
 package com.yuan.soft
 
+import android.app.Activity
+import android.app.ProgressDialog
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
-import android.os.Looper
-import android.support.v7.app.AppCompatActivity
+import android.os.Handler
+import android.os.Message
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.makeText
+import java.lang.ref.WeakReference
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
     val db: SQLiteDatabase by lazy {
         DbHelper(this).writableDatabase
     }
@@ -21,11 +26,12 @@ class MainActivity : AppCompatActivity() {
         Email(this, db)
     }
     private val mainLayout: LinearLayout by lazy {
-        findViewById<LinearLayout>(R.id.mainLayout)
+        findViewById(R.id.mainLayout) as LinearLayout
     }
 
     lateinit var listLayout: View
     lateinit var listView: ListView
+    lateinit var pd: ProgressDialog
     var timer: Timer? = null
 
     companion object {
@@ -35,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
+        pd = ProgressDialog(this)
+
         createListLayout(R.layout.goods, R.id.listView_goods, GoodsAdapter(this, db))
     }
 
@@ -59,7 +67,8 @@ class MainActivity : AppCompatActivity() {
                 toast("商品资料")
             }
             R.id.mx -> {
-                createListLayout(R.layout.sale_mx, R.id.listView_sale_mx, SaleMXAdapter(this, db, Date(), Date()))
+                val date = Date()
+                createListLayout(R.layout.sale_mx, R.id.listView_sale_mx, SaleMXAdapter(this, db, date, date))
                 toast("本日销售明细")
             }
             R.id.db -> {
@@ -80,64 +89,46 @@ class MainActivity : AppCompatActivity() {
                 toast("本月按天汇总")
             }
             R.id.rq_mx -> {
-                val dp = MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
+                MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
                     override fun postMessage(start: Date, end: Date) {
                         val sale_mx = SaleMXAdapter(this@MainActivity, db, start, end)
                         createListLayout(R.layout.sale_mx, R.id.listView_sale_mx, sale_mx)
                         toast("选择日期:销售明细")
                     }
-                })
-                dp.show()
+                }).show()
             }
             R.id.rq_db -> {
-                val dp = MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
+                MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
                     override fun postMessage(start: Date, end: Date) {
                         val adapter = SaleDBAdapter(this@MainActivity, db, start, end)
                         createListLayout(R.layout.sale_db, R.id.listView_sale_db, adapter)
                         toast("选择日期:销售单笔")
                     }
-                })
-                dp.show()
+                }).show()
             }
             R.id.rq_fl -> {
-                val dp = MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
+                MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
                     override fun postMessage(start: Date, end: Date) {
                         val sale_fl = SaleFLAdapter(this@MainActivity, db, start, end)
                         createListLayout(R.layout.sale_fl, R.id.listView_sale_fl, sale_fl)
                         toast("选择日期:分类汇总")
                     }
-                })
-                dp.show()
+                }).show()
             }
             R.id.rq_day -> {
-                val dp = MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
+                MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
                     override fun postMessage(start: Date, end: Date) {
                         val sale_day = SaleDayAdapter(this@MainActivity, db, start, end)
                         createListLayout(R.layout.sale_day, R.id.listView_sale_day, sale_day)
                         toast("选择日期:按天汇总")
                     }
-                })
-                dp.show()
+                }).show()
             }
             R.id.refresh -> {
-                timer = Timer("receive")
-                timer?.schedule(object : TimerTask() {
-                    override fun run() {
-                        try {
-                            Looper.prepare()
-                            email.receive()
-                            toast("同步数据成功！")
-                            Looper.loop()
-                        } catch (e: Exception) {
-                            Looper.prepare()
-                            toast("接受邮件错误:\r\n" + e.message)
-                            Looper.loop()
-                        } finally {
-                            timer?.cancel()
-                            timer = null
-                        }
-                    }
-                }, 0)
+                Thread(Runnable {
+                    email.receive()
+                    myHandler.sendEmptyMessage(0)
+                }).start()
             }
             R.id.exit -> finish()
             else -> return false
@@ -146,8 +137,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun toast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+        makeText(this, msg, LENGTH_LONG).show()
     }
+
+    private val myHandler = MyHandler(this)
+
+    private class MyHandler(activity: MainActivity) : Handler() {
+        private val mActivity: WeakReference<MainActivity> = WeakReference(activity)
+        override fun handleMessage(msg: Message?) {
+            super.handleMessage(msg)
+            val activity = mActivity.get()
+            if (activity != null) {
+                if (msg?.what == 0)
+                    activity.toast("thread message: mail is read.")
+            }
+        }
+    }
+
 
     override fun onDestroy() {
         val c = Calendar.getInstance(Locale.CHINA)

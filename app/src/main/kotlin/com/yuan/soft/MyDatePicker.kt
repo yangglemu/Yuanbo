@@ -20,16 +20,16 @@ class MyDatePicker(context: Context?, theme: Int, postMsg: MainActivity.IPostMes
     private val postMessage = postMsg
 
     private val datePickerStart: DatePicker by lazy {
-        findViewById<DatePicker>(R.id.datePickerStart)
+        findViewById(R.id.datePickerStart) as DatePicker
     }
     private val datePickerEnd: DatePicker by lazy {
-        findViewById<DatePicker>(R.id.datePickerEnd)
+        findViewById(R.id.datePickerEnd) as DatePicker
     }
     private val buttonOK: Button by lazy {
-        findViewById<Button>(R.id.buttonOK)
+        findViewById(R.id.buttonOK) as Button
     }
     private val buttonCancel: Button by lazy {
-        findViewById<Button>(R.id.buttonCancel)
+        findViewById(R.id.buttonCancel) as Button
     }
     lateinit var dateStart: Date
     lateinit var dateEnd: Date
