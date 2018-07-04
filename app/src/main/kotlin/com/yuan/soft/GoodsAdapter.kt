@@ -13,27 +13,26 @@ import java.util.*
 class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(context, sqlite) {
 
     override fun initData() {
-        val cursor = db.rawQuery("select tm,sl,shop from goods where sl>0 order by tm,shop asc", null)
-        var id = 0
-        var tm = 0
-        var sl = 0
-        var je = 0
-        var shop = ""
+        val cursor = db.rawQuery("select tm,sl,tm*sl as je,shop from goods order by tm,shop asc", null)
+        var id = 1
+        var tm: Int
+        var sl: Int
+        var je: Int
+        var shop: String
         while (cursor.moveToNext()) {
             val map: HashMap<String, String> = HashMap()
             tm = cursor.getInt(0)
             sl = cursor.getInt(1)
-            shop = cursor.getString(2)
-            map["id"] = (++id).toString()
-            map["tm"] = tm.toString() + ".00"
+            je = cursor.getInt(2)
+            shop = cursor.getString(3)
+            map["id"] = (id++).toString()
+            map["tm"] = tm.toString()
             map["sl"] = sl.toString()
-            je = sl * tm
             map["je"] = decimalFormatter.format(je)
             map["shop"] = shop
             mData.add(map)
         }
         cursor.close()
-        Log.i("yangglemu", "id:$id,tm:$tm,sl:$sl,je:$je,shop:$shop")
     }
 
     override fun compute() {

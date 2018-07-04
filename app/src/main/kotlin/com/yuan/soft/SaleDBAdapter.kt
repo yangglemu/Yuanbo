@@ -14,12 +14,12 @@ class SaleDBAdapter(context: MainActivity, db: SQLiteDatabase, start: Date, end:
         DataAdapter(context, db, start, end) {
     override fun initData() {
         if (end!!.before(start!!)) {
-            toast("起始时间必须在结束时间之前!")
-            return
+            //mContext.toast("起始时间必须在结束时间之前!")
+            throw IllegalArgumentException()
         }
         val s = start?.toString(MainActivity.formatString)
         val e = end?.toString(MainActivity.formatString)
-        val c = db.rawQuery("select datetime(rq) as rq,sl,je from sale_db where date(rq)>='$s' and date(rq)<='$e' order by rq asc", null)
+        val c = db.rawQuery("select rq,sl,je from sale_db where date(rq)>='$s' and date(rq)<='$e' order by rq asc", null)
         var id = 0
         while (c.moveToNext()) {
             val map = HashMap<String, String>()

@@ -28,15 +28,16 @@ class SaleDayAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date?
             s = dateFormatter.format(start)
             e = dateFormatter.format(end)
         }
-        var id = 0
-        val sql = "select date(rq) as rq,sum(sl) as sl,sum(je) as je from sale_db where date(rq)>='$s' and date(rq)<='$e' group by date(rq) order by rq asc"
+        var id = 1
+        val sql = "select date(rq) as rq,sum(sl) as sl,sum(je) as je,shop from sale_db where date(rq)>='$s' and date(rq)<='$e' group by shop,date(rq) order by rq desc"
         val c = db.rawQuery(sql, null)
         while (c.moveToNext()) {
             val map = HashMap<String, String>()
-            map["id"] = (++id).toString()
+            map["id"] = (id++).toString()
             map["rq"] = c.getString(0)
             map["sl"] = c.getString(1)
             map["je"] = decimalFormatter.format(c.getInt(2))
+            map["shop"] = c.getString(3)
             mData.add(map)
         }
         c.close()
@@ -78,6 +79,7 @@ class SaleDayAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date?
         vh.rq.text = m["rq"]
         vh.sl.text = m["sl"]
         vh.je.text = m["je"]
+        vh.shop.text = m["shop"]
         return v
     }
 
@@ -86,6 +88,7 @@ class SaleDayAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date?
         val rq = v.findViewById(R.id.sale_day_rq) as TextView
         val sl = v.findViewById(R.id.sale_day_sl) as TextView
         val je = v.findViewById(R.id.sale_day_je) as TextView
+        val shop = v.findViewById(R.id.sale_day_shop) as TextView
     }
 
 }

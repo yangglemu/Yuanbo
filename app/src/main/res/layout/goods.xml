@@ -15,31 +15,31 @@
         <TextView
                 android:id="@+id/goods_header_id"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.8"
+                android:layout_weight="0.6"
                 android:text="行号"/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/goods_header_tm"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.8"
+                android:layout_weight="0.9"
                 android:text="条码"/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/goods_header_sl"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.8"
+                android:layout_weight="0.9"
                 android:text="数量"/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/goods_header_je"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="金额"/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/goods_header_shop"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1.6"
+                android:layout_weight="1.5"
                 android:text="门店"/>
         <View style="@style/verLine_header"/>
 

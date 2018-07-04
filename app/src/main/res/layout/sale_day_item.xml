@@ -7,22 +7,29 @@
     <TextView
             android:id="@+id/sale_day_id"
             style="@style/listItemStyle"
-            android:layout_weight="1"/>
+            android:layout_weight="0.6"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/sale_day_rq"
             style="@style/listItemStyle"
-            android:layout_weight="2"/>
+            android:layout_weight="1.4"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/sale_day_sl"
             style="@style/listItemStyle"
-            android:layout_weight="1"/>
+            android:layout_weight="0.9"/>
     <View style="@style/verLine_item"/>
 
     <TextView
             android:id="@+id/sale_day_je"
             style="@style/listItemStyle"
-            android:layout_weight="1.5"/>
+            android:layout_weight="1.1"/>
     <View style="@style/verLine_item"/>
+
+    <TextView
+            android:id="@+id/sale_day_shop"
+            style="@style/listItemStyle"
+            android:layout_weight="1"
+            android:text="门店"/>
+    <View style="@style/verLine_header"/>
 </LinearLayout>

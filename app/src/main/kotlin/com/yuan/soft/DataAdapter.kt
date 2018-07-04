@@ -13,7 +13,7 @@ import java.util.*
  * Created by yuan on 2016/6/16.
  */
 abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var start: Date? = null, var end: Date? = null) : BaseAdapter() {
-    private val mContext = context
+    protected val mContext = context
     val mInflater = LayoutInflater.from(mContext)!!
     val mData = ArrayList<HashMap<String, String>>()
     val db = sqlite
@@ -87,7 +87,4 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
 
     override fun getItemId(position: Int): Long = position.toLong()
 
-    fun toast(msg: String) {
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
-    }
 }
