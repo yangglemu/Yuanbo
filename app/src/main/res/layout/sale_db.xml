@@ -21,7 +21,7 @@
         <TextView
                 android:id="@+id/sale_db_header_rq"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1.4"
+                android:layout_weight="1.8"
                 android:text="日期"/>
         <View style="@style/verLine_header"/>
         <TextView
@@ -33,13 +33,13 @@
         <TextView
                 android:id="@+id/sale_db_header_je"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.7"
+                android:layout_weight="0.6"
                 android:text="金额 "/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/sale_db_header_ss"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.7"
+                android:layout_weight="0.6"
                 android:text="实收 "/>
         <View style="@style/verLine_header"/>
         <TextView
@@ -51,7 +51,7 @@
         <TextView
                 android:id="@+id/sale_db_header_shop"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1.4"
+                android:layout_weight="1.2"
                 android:text="门店 "/>
         <View style="@style/verLine_header"/>
 

@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -14,7 +15,6 @@ class SaleDBAdapter(context: MainActivity, db: SQLiteDatabase, start: Date, end:
         DataAdapter(context, db, start, end) {
     override fun initData() {
         if (end!!.before(start!!)) {
-            //mContext.toast("起始时间必须在结束时间之前!")
             throw IllegalArgumentException()
         }
         val s = start?.toString(MainActivity.formatString)
@@ -24,12 +24,12 @@ class SaleDBAdapter(context: MainActivity, db: SQLiteDatabase, start: Date, end:
         while (c.moveToNext()) {
             val map = HashMap<String, String>()
             map["id"] = (id++).toString()
-            map["rq"] = c.getString(0)
+            map["rq"] = c.getString(0).substring(2)
             map["sl"] = c.getString(1)
             map["je"] = c.getString(2)
             map["ss"] = c.getString(3)
             map["zl"] = c.getString(4)
-            map["shop"] = c.getString(5)
+            map["shop"] = DataAdapter.shops[c.getString(5)]!!
             mData.add(map)
         }
         c.close()

@@ -19,12 +19,12 @@ class SaleMXAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
         while (c.moveToNext()) {
             val m = HashMap<String, String>()
             m["id"] = (id++).toString()
-            m["rq"] = c.getString(0)
+            m["rq"] = c.getString(0).substring(2)
             m["tm"] = c.getString(1)
             m["sl"] = c.getString(2)
             m["zq"] = c.getString(3)
             m["je"] = c.getString(4)
-            m["shop"] = c.getString(5)
+            m["shop"] = DataAdapter.shops[c.getString(5)]!!
             mData.add(m)
         }
         c.close()
@@ -43,10 +43,10 @@ class SaleMXAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
     }
 
     override fun setSort(v: View) {
-        val tm = v.findViewById(R.id.sale_mx_header_tm)
-        val sl = v.findViewById(R.id.sale_mx_header_sl)
-        val zq = v.findViewById(R.id.sale_mx_header_zq)
-        val je = v.findViewById(R.id.sale_mx_header_je)
+        val tm = v.findViewById(R.id.sale_mx_header_tm) as TextView
+        val sl = v.findViewById(R.id.sale_mx_header_sl) as TextView
+        val zq = v.findViewById(R.id.sale_mx_header_zq) as TextView
+        val je = v.findViewById(R.id.sale_mx_header_je) as TextView
         setClick(tm, "tm")
         setClick(sl, "sl")
         setClick(zq, "zq")

@@ -37,7 +37,7 @@ class SaleDayAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date?
             map["rq"] = c.getString(0)
             map["sl"] = c.getString(1)
             map["je"] = decimalFormatter.format(c.getInt(2))
-            map["shop"] = c.getString(3)
+            map["shop"] = DataAdapter.shops[c.getString(3)]!!
             mData.add(map)
         }
         c.close()

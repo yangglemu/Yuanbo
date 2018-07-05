@@ -12,33 +12,33 @@
     <TextView
             android:id="@+id/sale_mx_rq"
             style="@style/listItemStyle"
-            android:layout_weight="1.4"/>
+            android:layout_weight="1.8"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/sale_mx_tm"
             style="@style/listItemStyle"
-            android:layout_weight="0.8"/>
+            android:layout_weight="0.6"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/sale_mx_sl"
             style="@style/listItemStyle"
-            android:layout_weight="0.9"/>
+            android:layout_weight="0.6"/>
     <View style="@style/verLine_item"/>
 
     <TextView
             android:id="@+id/sale_mx_zq"
             style="@style/listItemStyle"
-            android:layout_weight="0.9"/>
+            android:layout_weight="0.6"/>
     <View style="@style/verLine_item"/>
 
     <TextView
             android:id="@+id/sale_mx_je"
             style="@style/listItemStyle"
-            android:layout_weight="0.9"/>
+            android:layout_weight="0.6"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/sale_mx_shop"
             style="@style/listItemStyle"
-            android:layout_weight="1.5"/>
+            android:layout_weight="1.2"/>
     <View style="@style/verLine_item"/>
 </LinearLayout>

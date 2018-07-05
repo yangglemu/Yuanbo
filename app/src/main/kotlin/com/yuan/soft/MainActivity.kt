@@ -1,7 +1,6 @@
 package com.yuan.soft
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.makeText
 import java.lang.ref.WeakReference
@@ -31,8 +29,6 @@ class MainActivity : Activity() {
 
     lateinit var listLayout: View
     lateinit var listView: ListView
-    lateinit var pd: ProgressDialog
-    var timer: Timer? = null
 
     companion object {
         var formatString = "yyyy-MM-dd"
@@ -41,7 +37,6 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        pd = ProgressDialog(this)
 
         createListLayout(R.layout.goods, R.id.listView_goods, GoodsAdapter(this, db))
     }
@@ -126,8 +121,7 @@ class MainActivity : Activity() {
             }
             R.id.refresh -> {
                 Thread(Runnable {
-                    email.receive()
-                    myHandler.sendEmptyMessage(0)
+                    email.receive(myHandler)
                 }).start()
             }
             R.id.exit -> finish()
@@ -142,14 +136,14 @@ class MainActivity : Activity() {
 
     private val myHandler = MyHandler(this)
 
-    private class MyHandler(activity: MainActivity) : Handler() {
+    class MyHandler(activity: MainActivity) : Handler() {
         private val mActivity: WeakReference<MainActivity> = WeakReference(activity)
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
             val activity = mActivity.get()
             if (activity != null) {
-                if (msg?.what == 0)
-                    activity.toast("thread message: mail is read.")
+                val data = msg?.obj as IntArray
+                activity.toast("共 ${data[0]} 邮件，其中删除 ${data[1]}，读取 ${data[2]}")
             }
         }
     }

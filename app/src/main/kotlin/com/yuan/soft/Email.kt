@@ -10,8 +10,10 @@ import org.xml.sax.InputSource
 import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.logging.Handler
 import javax.mail.Flags
 import javax.mail.Folder
+import javax.mail.Message
 import javax.mail.Session
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -37,10 +39,10 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         cursor.close()
     }
 
-    fun receive() {
+    fun receive(handler: MainActivity.MyHandler) {
         val p = Properties()
-        p["mail.pop3.host"]= pop3Host
-        p["mail.pop3.port"]= pop3Port
+        p["mail.pop3.host"] = pop3Host
+        p["mail.pop3.port"] = pop3Port
         val session = Session.getInstance(p)
         val store = session.getStore("pop3")
         store.connect(username, password)
@@ -49,7 +51,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         val total = folder.messages.size
         var del = 0
         var read = 0
-        var newShop = 0
+        //var newShop = 0
         for (msg in folder.messages) {
             val buffer = msg.subject.split('@')
             if (buffer.size != 2) {
@@ -58,7 +60,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 continue
             }
             if (!isInShops(buffer[0])) {
-                newShop++
+                //newShop++
                 continue
             }
             val uid = folder.getUID(msg)
@@ -70,6 +72,10 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         }
         folder.close(false)
         store.close()
+        val msg = android.os.Message()
+        val data = intArrayOf(total, del, read)
+        msg.obj = data
+        handler.sendMessage(msg)
     }
 
     private fun insertIntoDatabase(content: String, date: String) {

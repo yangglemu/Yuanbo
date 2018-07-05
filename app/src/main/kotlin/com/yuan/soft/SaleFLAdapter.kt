@@ -20,16 +20,15 @@ class SaleFLAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
         sb.append("where date(rq)>='$s' and date(rq)<='$e' ")
         sb.append("group by shop,tm order by shop,tm asc")
         val c = db.rawQuery(sb.toString(), null)
-
         var id = 1
         while (c.moveToNext()) {
             val map = HashMap<String, String>()
             map["id"] = (id++).toString()
-            map["rq"] = c.getString(0)
+            map["rq"] = c.getString(0).substring(2)
             map["tm"] = c.getString(1)
             map["sl"] = c.getString(2)
             map["je"] = c.getString(3)
-            map["shop"] = c.getString(4)
+            map["shop"] = DataAdapter.shops[c.getString(4)]!!
             mData.add(map)
         }
         c.close()

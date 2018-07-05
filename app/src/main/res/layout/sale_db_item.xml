@@ -12,7 +12,7 @@
     <TextView
             android:id="@+id/sale_db_rq"
             style="@style/listItemStyle"
-            android:layout_weight="1.4"/>
+            android:layout_weight="1.8"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/sale_db_sl"
@@ -22,12 +22,12 @@
     <TextView
             android:id="@+id/sale_db_je"
             style="@style/listItemStyle"
-            android:layout_weight="0.7"/>
+            android:layout_weight="0.6"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/sale_db_ss"
             style="@style/listItemStyle"
-            android:layout_weight="0.7"/>
+            android:layout_weight="0.6"/>
     <View style="@style/verLine_item"/>
 
     <TextView
@@ -38,7 +38,7 @@
     <TextView
             android:id="@+id/sale_db_shop"
             style="@style/listItemStyle"
-            android:layout_weight="1.4"/>
+            android:layout_weight="1.2"/>
     <View style="@style/verLine_item"/>
 
 </LinearLayout>

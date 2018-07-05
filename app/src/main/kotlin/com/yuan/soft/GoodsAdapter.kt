@@ -29,7 +29,7 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
             map["tm"] = tm.toString()
             map["sl"] = sl.toString()
             map["je"] = decimalFormatter.format(je)
-            map["shop"] = shop
+            map["shop"] = DataAdapter.shops[shop]!!
             mData.add(map)
         }
         cursor.close()

@@ -21,37 +21,37 @@
         <TextView
                 android:id="@+id/sale_mx_header_rq"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1.4"
+                android:layout_weight="1.8"
                 android:text="日期"/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/sale_mx_header_tm"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.8"
+                android:layout_weight="0.6"
                 android:text="条码"/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/sale_mx_header_sl"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.9"
+                android:layout_weight="0.6"
                 android:text="数量"/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/sale_mx_header_zq"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.9"
+                android:layout_weight="0.6"
                 android:text="折扣 "/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/sale_mx_header_je"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.9"
+                android:layout_weight="0.6"
                 android:text="金额"/>
         <View style="@style/verLine_header"/>
         <TextView
                 android:id="@+id/sale_mx_header_shop"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1.5"
+                android:layout_weight="1.2"
                 android:text="门店"/>
         <View style="@style/verLine_header"/>
 

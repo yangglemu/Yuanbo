@@ -4,10 +4,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.BaseAdapter
-import android.widget.Toast
+import java.lang.reflect.Type
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by yuan on 2016/6/16.
@@ -21,7 +22,19 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
     val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
     private val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
 
+    companion object {
+        val shops: HashMap<String, String> = HashMap()
+    }
+
     init {
+        if (shops.size == 0) {
+            val sql = "select pname,name from shop"
+            val c = db.rawQuery(sql, null)
+            while (c.moveToNext()) {
+                shops[c.getString(0)] = c.getString(1)
+            }
+            c.close()
+        }
         initData()
         compute()
     }
