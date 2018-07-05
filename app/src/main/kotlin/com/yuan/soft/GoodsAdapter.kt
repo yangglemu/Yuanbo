@@ -13,7 +13,7 @@ import java.util.*
 class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(context, sqlite) {
 
     override fun initData() {
-        val cursor = db.rawQuery("select tm,sl,tm*sl as je,shop from goods order by tm,shop asc", null)
+        val cursor = db.rawQuery("select tm,sl,tm*sl as je,shop from goods order by shop,tm asc", null)
         var id = 1
         var tm: Int
         var sl: Int

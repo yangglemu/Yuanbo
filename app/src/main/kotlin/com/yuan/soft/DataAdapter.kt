@@ -13,7 +13,7 @@ import java.util.*
  * Created by yuan on 2016/6/16.
  */
 abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var start: Date? = null, var end: Date? = null) : BaseAdapter() {
-    protected val mContext = context
+    private val mContext = context
     val mInflater = LayoutInflater.from(mContext)!!
     val mData = ArrayList<HashMap<String, String>>()
     val db = sqlite
@@ -54,16 +54,16 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
                         tv.tag = "asc"
                     }
                 }
-                "je" -> {
+                "je", "tm", "sl" -> {
                     if (tv.tag == "asc") {
-                        mData.sortBy { decimalFormatter.parse(it[name]).toInt() }
+                        mData.sortBy { it[name]?.toInt() }
                         tv.tag = "desc"
                     } else {
-                        mData.sortByDescending { decimalFormatter.parse(it[name]).toInt() }
+                        mData.sortByDescending { it[name]?.toInt() }
                         tv.tag = "asc"
                     }
                 }
-                else -> {
+                "zq" -> {
                     if (tv.tag == "asc") {
                         mData.sortBy { it[name]?.toFloat() }
                         tv.tag = "desc"
@@ -71,6 +71,8 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
                         mData.sortByDescending { it[name]?.toFloat() }
                         tv.tag = "asc"
                     }
+                }
+                else -> {
                 }
             }
             for (index in 0 until mData.size) {

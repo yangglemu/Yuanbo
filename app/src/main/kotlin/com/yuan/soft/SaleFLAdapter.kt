@@ -16,18 +16,20 @@ class SaleFLAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
         val s = dateFormatter.format(start)
         val e = dateFormatter.format(end)
         val sb = StringBuilder()
-        sb.append("select sale_mx.tm,sum(sale_mx.sl) as sl,sum(sale_mx.je) as je from sale_mx join goods on ")
-        sb.append("(sale_mx.tm=goods.tm) where date(rq)>='$s' and date(rq)<='$e' ")
-        sb.append("group by sale_mx.tm order by goods.sj asc")
+        sb.append("select rq, tm,sum(sl) as sl,sum(je) as je,shop from sale_mx ")
+        sb.append("where date(rq)>='$s' and date(rq)<='$e' ")
+        sb.append("group by shop,tm order by shop,tm asc")
         val c = db.rawQuery(sb.toString(), null)
 
-        var id = 0
+        var id = 1
         while (c.moveToNext()) {
             val map = HashMap<String, String>()
-            map["id"] = (++id).toString()
-            map["tm"] = c.getString(0) + ".00"
-            map["sl"] = c.getString(1)
-            map["je"] = decimalFormatter.format(c.getInt(2))
+            map["id"] = (id++).toString()
+            map["rq"] = c.getString(0)
+            map["tm"] = c.getString(1)
+            map["sl"] = c.getString(2)
+            map["je"] = c.getString(3)
+            map["shop"] = c.getString(4)
             mData.add(map)
         }
         c.close()
@@ -37,19 +39,20 @@ class SaleFLAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
         val tm = v.findViewById(R.id.sale_fl_header_tm) as TextView
         val sl = v.findViewById(R.id.sale_fl_header_sl) as TextView
         val je = v.findViewById(R.id.sale_fl_header_je) as TextView
+        val rq = v.findViewById(R.id.sale_fl_header_rq) as TextView
         setClick(tm, "tm")
         setClick(sl, "sl")
         setClick(je, "je")
+        setClick(rq, "rq")
     }
 
     override fun compute() {
         val sl = mData.sumBy { it["sl"]!!.toInt() }
-        val je = mData.sumBy { decimalFormatter.parse(it["je"]).toInt() }
+        val je = mData.sumBy { it["je"]!!.toInt() }
         val map = HashMap<String, String>()
-        map["id"] = "合计"
-        map["tm"] = ""
+        map["rq"] = "合计"
         map["sl"] = sl.toString()
-        map["je"] = decimalFormatter.format(je)
+        map["je"] = je.toString()
         mData.add(map)
     }
 
@@ -66,16 +69,20 @@ class SaleFLAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
         }
         val map = mData[position]
         vh.id.text = map["id"]
+        vh.rq.text = map["rq"]
         vh.tm.text = map["tm"]
         vh.sl.text = map["sl"]
         vh.je.text = map["je"]
+        vh.shop.text = map["shop"]
         return v
     }
 
     private class ViewHolder(v: View) {
         val id = v.findViewById(R.id.sale_fl_id) as TextView
+        val rq = v.findViewById(R.id.sale_fl_rq) as TextView
         val tm = v.findViewById(R.id.sale_fl_tm) as TextView
         val sl = v.findViewById(R.id.sale_fl_sl) as TextView
         val je = v.findViewById(R.id.sale_fl_je) as TextView
+        val shop = v.findViewById(R.id.sale_fl_shop) as TextView
     }
 }

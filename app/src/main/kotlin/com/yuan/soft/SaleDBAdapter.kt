@@ -19,27 +19,30 @@ class SaleDBAdapter(context: MainActivity, db: SQLiteDatabase, start: Date, end:
         }
         val s = start?.toString(MainActivity.formatString)
         val e = end?.toString(MainActivity.formatString)
-        val c = db.rawQuery("select rq,sl,je from sale_db where date(rq)>='$s' and date(rq)<='$e' order by rq asc", null)
-        var id = 0
+        val c = db.rawQuery("select rq,sl,je,ss,zl,shop from sale_db where date(rq)>='$s' and date(rq)<='$e' order by rq asc", null)
+        var id = 1
         while (c.moveToNext()) {
             val map = HashMap<String, String>()
-            map["id"] = (++id).toString()
+            map["id"] = (id++).toString()
             map["rq"] = c.getString(0)
             map["sl"] = c.getString(1)
-            map["je"] = decimalFormatter.format(c.getInt(2))
+            map["je"] = c.getString(2)
+            map["ss"] = c.getString(3)
+            map["zl"] = c.getString(4)
+            map["shop"] = c.getString(5)
             mData.add(map)
         }
         c.close()
     }
 
     override fun compute() {
-        val sum_sl = mData.sumBy { it["sl"]!!.toInt() }
-        val sum_je = mData.sumBy { decimalFormatter.parse(it["je"]).toInt() }
+        val sl = mData.sumBy { it["sl"]!!.toInt() }
+        val je = mData.sumBy { it["je"]!!.toInt() }
         val map = HashMap<String, String>()
         map["id"] = "合计"
         map["rq"] = "来客数:${mData.size}"
-        map["sl"] = sum_sl.toString()
-        map["je"] = decimalFormatter.format(sum_je)
+        map["sl"] = sl.toString()
+        map["je"] = je.toString()
         mData.add(map)
     }
 
@@ -69,6 +72,9 @@ class SaleDBAdapter(context: MainActivity, db: SQLiteDatabase, start: Date, end:
         vh.rq.text = map["rq"]
         vh.sl.text = map["sl"]
         vh.je.text = map["je"]
+        vh.ss.text = map["ss"]
+        vh.zl.text = map["zl"]
+        vh.shop.text = map["shop"]
         return v
     }
 
@@ -77,6 +83,9 @@ class SaleDBAdapter(context: MainActivity, db: SQLiteDatabase, start: Date, end:
         val rq = v.findViewById(R.id.sale_db_rq) as TextView
         val sl = v.findViewById(R.id.sale_db_sl) as TextView
         val je = v.findViewById(R.id.sale_db_je) as TextView
+        val ss = v.findViewById(R.id.sale_db_ss) as TextView
+        val zl = v.findViewById(R.id.sale_db_zl) as TextView
+        val shop = v.findViewById(R.id.sale_db_shop) as TextView
     }
 
 }

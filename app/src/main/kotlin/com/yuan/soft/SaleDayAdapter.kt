@@ -29,7 +29,7 @@ class SaleDayAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date?
             e = dateFormatter.format(end)
         }
         var id = 1
-        val sql = "select date(rq) as rq,sum(sl) as sl,sum(je) as je,shop from sale_db where date(rq)>='$s' and date(rq)<='$e' group by shop,date(rq) order by rq desc"
+        val sql = "select date(rq) as rq,sum(sl) as sl,sum(je) as je,shop from sale_db where date(rq)>='$s' and date(rq)<='$e' group by shop,date(rq) order by shop,rq desc"
         val c = db.rawQuery(sql, null)
         while (c.moveToNext()) {
             val map = HashMap<String, String>()
