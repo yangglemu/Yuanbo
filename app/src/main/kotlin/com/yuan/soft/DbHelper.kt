@@ -24,6 +24,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, name, null, version
         db.execSQL("CREATE TABLE [shop] (pname VARCHAR(20) PRIMARY KEY,name VARCHAR(40),address VARCHAR(100),worker VARCHAR(20),tel VARCHAR(100),rq DATETIME)")
         db.execSQL("INSERT INTO [shop] (pname,name,rq) values('wkl','万客隆服饰','2018-06-06 06:06:06')")
         db.execSQL("INSERT INTO [shop] (pname,name,rq) values('duobao','阳光服饰','2018-06-06 06:06:06')")
+        db.execSQL("INSERT INTO [shop] (pname,name,rq) values('hhb','海波服饰','2018-06-06 06:06:06')")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) =

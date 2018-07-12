@@ -11,8 +11,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.Toast.LENGTH_LONG
+import android.widget.Switch
+import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
+import com.yuan.soft.R.id.db
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -20,7 +22,7 @@ class MainActivity : Activity() {
     val db: SQLiteDatabase by lazy {
         DbHelper(this).writableDatabase
     }
-    val email: Email by lazy {
+    private val email: Email by lazy {
         Email(this, db)
     }
     private val mainLayout: LinearLayout by lazy {
@@ -29,6 +31,7 @@ class MainActivity : Activity() {
 
     lateinit var listLayout: View
     lateinit var listView: ListView
+    var statusDialog: StatusDialog? = null
 
     companion object {
         var formatString = "yyyy-MM-dd"
@@ -37,7 +40,6 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-
         createListLayout(R.layout.goods, R.id.listView_goods, GoodsAdapter(this, db))
     }
 
@@ -120,6 +122,8 @@ class MainActivity : Activity() {
                 }).show()
             }
             R.id.refresh -> {
+                statusDialog = StatusDialog(this, R.layout.status_dialog)
+                statusDialog!!.show()
                 Thread(Runnable {
                     email.receive(myHandler)
                 }).start()
@@ -131,7 +135,7 @@ class MainActivity : Activity() {
     }
 
     fun toast(msg: String) {
-        makeText(this, msg, LENGTH_LONG).show()
+        makeText(this, msg, LENGTH_SHORT).show()
     }
 
     private val myHandler = MyHandler(this)
@@ -142,8 +146,20 @@ class MainActivity : Activity() {
             super.handleMessage(msg)
             val activity = mActivity.get()
             if (activity != null) {
-                val data = msg?.obj as IntArray
-                activity.toast("共 ${data[0]} 邮件，其中删除 ${data[1]}，读取 ${data[2]}")
+                when (msg?.what) {
+                    1 -> {
+                        val bar = activity.statusDialog!!.progressBar
+                        val label = activity.statusDialog!!.label
+                        //msg.arg1:total, msg.arg2:done
+                        val present = msg.arg2.toFloat() / msg.arg1.toFloat() * 100.0
+                        bar.progress = present.toInt()
+                        label.text = "处理邮件：${msg.arg1}/${msg.arg2}"
+                    }
+                    2 -> {
+                        activity.statusDialog?.dismiss()
+                        activity.statusDialog = null
+                    }
+                }
             }
         }
     }

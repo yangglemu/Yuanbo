@@ -17,19 +17,15 @@ class SaleDayAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date?
         val e: String
         if (start == null || end == null) {
             val now = Date()
-            val calendar = Calendar.getInstance(Locale.CHINA)
-            calendar.time = now
-            calendar.add(Calendar.DAY_OF_MONTH, -29)
-            val before = calendar.time
             e = dateFormatter.format(now)
-            s = dateFormatter.format(before)
+            s = dateFormatter.format(now)
 
         } else {
             s = dateFormatter.format(start)
             e = dateFormatter.format(end)
         }
         var id = 1
-        val sql = "select date(rq) as rq,sum(sl) as sl,sum(je) as je,shop from sale_db where date(rq)>='$s' and date(rq)<='$e' group by shop,date(rq) order by shop,rq desc"
+        val sql = "select date(rq) as rq,sum(sl) as sl,sum(je) as je,shop from sale_db where date(rq)>='$s' and date(rq)<='$e' group by shop,date(rq) order by rq,shop desc"
         val c = db.rawQuery(sql, null)
         while (c.moveToNext()) {
             val map = HashMap<String, String>()

@@ -19,7 +19,7 @@ class SaleDBAdapter(context: MainActivity, db: SQLiteDatabase, start: Date, end:
         }
         val s = start?.toString(MainActivity.formatString)
         val e = end?.toString(MainActivity.formatString)
-        val c = db.rawQuery("select rq,sl,je,ss,zl,shop from sale_db where date(rq)>='$s' and date(rq)<='$e' order by rq asc", null)
+        val c = db.rawQuery("select rq,sl,je,ss,zl,shop from sale_db where date(rq)>='$s' and date(rq)<='$e' order by shop,rq asc", null)
         var id = 1
         while (c.moveToNext()) {
             val map = HashMap<String, String>()

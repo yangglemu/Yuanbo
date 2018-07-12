@@ -14,7 +14,7 @@ class SaleMXAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
     override fun initData() {
         val s = start?.toString(MainActivity.formatString)
         val e = end?.toString(MainActivity.formatString)
-        val c = db.rawQuery("select rq,tm,sl,zq,je,shop from sale_mx where date(rq)>='$s' and date(rq)<='$e' order by rq asc", null)
+        val c = db.rawQuery("select rq,tm,sl,zq,je,shop from sale_mx where date(rq)>='$s' and date(rq)<='$e' order by shop,rq asc", null)
         var id = 1
         while (c.moveToNext()) {
             val m = HashMap<String, String>()

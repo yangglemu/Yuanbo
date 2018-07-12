@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="300dp"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true">
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/title"
+              android:text="更新数据"
+              android:textSize="16dp"
+              android:textAlignment="center"
+              android:layout_marginTop="20dp"
+              android:layout_marginBottom="20dp"/>
+
+    <ProgressBar style="@android:style/Widget.ProgressBar.Horizontal"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/progressBar"
+                 android:max="100"
+                 android:progress="0"
+                 android:layout_gravity="center"
+                 android:layout_marginBottom="20dp"/>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/label"
+              android:text="处理邮件：00/99"
+              android:textSize="14dp"
+              android:textAlignment="center"
+              android:layout_marginBottom="20dp"
+              android:layout_gravity="center"/>
+
+</LinearLayout>

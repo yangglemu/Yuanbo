@@ -49,14 +49,18 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         val folder = store.getFolder("INBOX") as POP3Folder
         folder.open(Folder.READ_WRITE)
         val total = folder.messages.size
-        var del = 0
         var read = 0
         //var newShop = 0
         for (msg in folder.messages) {
+            read++
+            val message = android.os.Message()
+            message.arg1 = total
+            message.arg2 = read
+            message.what = 1
+            handler.sendMessage(message)
             val buffer = msg.subject.split('@')
             if (buffer.size != 2) {
                 msg.setFlag(Flags.Flag.DELETED, true)
-                del++
                 continue
             }
             if (!isInShops(buffer[0])) {
@@ -67,15 +71,13 @@ class Email(val context: Context, val db: SQLiteDatabase) {
             if (isNewMessage(uid)) {
                 insertIntoDatabase(msg.content.toString(), buffer[1])
                 db.execSQL("insert into mail(uid,rq) values('$uid','${buffer[1]}')")
-                read++
             }
         }
         folder.close(false)
         store.close()
-        val msg = android.os.Message()
-        val data = intArrayOf(total, del, read)
-        msg.obj = data
-        handler.sendMessage(msg)
+        val m = android.os.Message()
+        m.what = 2
+        handler.sendMessage(m)
     }
 
     private fun insertIntoDatabase(content: String, date: String) {
