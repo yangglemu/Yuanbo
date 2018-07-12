@@ -21,7 +21,7 @@
         <TextView
                 android:id="@+id/sale_db_header_rq"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1.8"
+                android:layout_weight="2.0"
                 android:text="日期"/>
         <View style="@style/verLine_header"/>
         <TextView
@@ -51,7 +51,7 @@
         <TextView
                 android:id="@+id/sale_db_header_shop"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1.2"
+                android:layout_weight="1.0"
                 android:text="门店 "/>
         <View style="@style/verLine_header"/>
 

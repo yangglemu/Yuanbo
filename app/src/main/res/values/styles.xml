@@ -4,7 +4,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:actionBarSize">50dp</item>
         <item name="android:actionBarStyle">@style/myActionBarStyle</item>
-        <item name="android:dialogTheme">@style/StatusDialog</item>
+        <!--<item name="android:dialogTheme">@style/StatusDialog</item>-->
     </style>
     <style name="datePickerDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
@@ -37,9 +37,9 @@
         <item name="android:layout_height">@dimen/verLineHeight_item</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="StatusDialog" parent="@android:style/Theme.Holo.Dialog">
+    <style name="statusDialog" parent="@android:style/Theme.Dialog">
         <!--背景颜色及和透明程度-->
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
         <!--是否去除标题 -->
         <item name="android:windowNoTitle">true</item>
         <!--是否去除边框-->

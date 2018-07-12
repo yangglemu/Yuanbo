@@ -12,12 +12,12 @@
     <TextView
             android:id="@+id/sale_day_rq"
             style="@style/listItemStyle"
-            android:layout_weight="1.4"/>
+            android:layout_weight="1.2"/>
     <View style="@style/verLine_item"/>
     <TextView
             android:id="@+id/sale_day_sl"
             style="@style/listItemStyle"
-            android:layout_weight="0.9"/>
+            android:layout_weight="0.7"/>
     <View style="@style/verLine_item"/>
 
     <TextView
@@ -29,7 +29,7 @@
     <TextView
             android:id="@+id/sale_day_shop"
             style="@style/listItemStyle"
-            android:layout_weight="1"
+            android:layout_weight="1.4"
             android:text="门店"/>
     <View style="@style/verLine_header"/>
 </LinearLayout>

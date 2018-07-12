@@ -16,11 +16,11 @@ import kotlin.collections.HashMap
 abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var start: Date? = null, var end: Date? = null) : BaseAdapter() {
     private val mContext = context
     val mInflater = LayoutInflater.from(mContext)!!
-    val mData = ArrayList<HashMap<String, String>>()
+    var mData = mutableListOf<HashMap<String, String>>()
+    var mData2: MutableList<HashMap<String, String>> = mData
     val db = sqlite
-    val decimalFormatter = DecimalFormat("#,##0.00")
+    //val decimalFormatter = DecimalFormat("#,##0.00")
     val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
-    private val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
 
     companion object {
         val shops: HashMap<String, String> = HashMap()
@@ -50,23 +50,23 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
             val lastMap = mData.last()
             mData.remove(lastMap)
             when (name) {
-                "rq" -> {
-                    if (tv.tag == "asc") {
-                        mData.sortBy {
-                            val df: SimpleDateFormat
-                            if (it[name]?.length == 10) df = dateFormatter
-                            else df = dateTimeFormatter
-                            df.parse(it[name])
-                        }
-                        tv.tag = "desc"
-                    } else {
-                        mData.sortByDescending {
-                            val df: SimpleDateFormat = if (it[name]?.length == 10) dateFormatter else dateTimeFormatter
-                            df.parse(it[name])
-                        }
-                        tv.tag = "asc"
+            /*
+            "rq" -> {
+                if (tv.tag == "asc") {
+                    mData.sortBy {
+                        val df: SimpleDateFormat = if (it[name]?.length == 10) dateFormatter else dateTimeFormatter
+                        df.parse(it[name])
                     }
+                    tv.tag = "desc"
+                } else {
+                    mData.sortByDescending {
+                        val df: SimpleDateFormat = if (it[name]?.length == 10) dateFormatter else dateTimeFormatter
+                        df.parse(it[name])
+                    }
+                    tv.tag = "asc"
                 }
+            }
+            */
                 "je", "tm", "sl" -> {
                     if (tv.tag == "asc") {
                         mData.sortBy { it[name]?.toInt() }
@@ -94,6 +94,18 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
             mData.add(lastMap)
             notifyDataSetChanged()
         }
+    }
+
+    fun filter(shopName: String) {
+        mData = if (shopName.contains("全部")) {
+            mData2
+        } else {
+            mData2.filter {
+                it["shop"] == shopName
+            }.toMutableList()
+        }
+        compute()
+        notifyDataSetChanged()
     }
 
     override fun getCount(): Int = mData.size

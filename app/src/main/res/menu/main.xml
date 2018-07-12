@@ -2,25 +2,24 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/fl"
-          android:title="价格汇总"
-          app:showAsAction="always|withText"/>
+          android:title="本日价格汇总"
+          app:showAsAction="ifRoom|withText"/>
 
     <item android:id="@+id/day"
-          android:title="按天汇总"
-          app:showAsAction="always|withText"/>
-
+          android:title="本日按天统计"
+          app:showAsAction="ifRoom|withText"/>
 
     <item android:id="@+id/sp"
-          android:title="库存"
-          app:showAsAction="always|withText"/>
+          android:title="商品库存"
+          app:showAsAction="ifRoom|withText"/>
 
     <item android:id="@+id/db"
-          android:title="单笔"
-          app:showAsAction="ifRoom|withText"/>
+          android:title="本日单笔明细"
+          app:showAsAction="never|withText"/>
 
     <item android:id="@+id/mx"
-          android:title="明细"
-          app:showAsAction="ifRoom|withText"/>
+          android:title="本日商品明细"
+          app:showAsAction="never|withText"/>
 
     <item android:id="@+id/rq"
           android:title="选择日期"
@@ -28,31 +27,31 @@
         <menu>
             <group android:id="@+id/group2" android:orderInCategory="145">
                 <item android:id="@+id/rq_mx"
-                      android:title="销售明细"
+                      android:title="销售商品明细"
                       app:showAsAction="never|withText"/>
                 <item android:id="@+id/rq_db"
-                      android:title="销售单笔"
+                      android:title="销售单笔明细"
                       app:showAsAction="never|withText"/>
                 <item android:id="@+id/rq_fl"
-                      android:title="价格汇总"
+                      android:title="销售价格汇总"
                       app:showAsAction="never|withText"/>
                 <item android:id="@+id/rq_day"
-                      android:title="按天汇总"
+                      android:title="按天统计汇总"
                       app:showAsAction="never|withText"/>
             </group>
         </menu>
     </item>
 
     <item android:id="@+id/shops"
-          android:title="门店"
+          android:title="查看门店"
           app:showAsAction="never|withText"
           android:icon="@android:drawable/ic_menu_myplaces"/>
 
     <item android:id="@+id/refresh"
-          android:title="同步"
+          android:title="数据同步"
           app:showAsAction="never|withText"/>
 
     <item android:id="@+id/exit"
-          android:title="退出"
+          android:title="退出系统"
           app:showAsAction="never|withText"/>
 </menu>

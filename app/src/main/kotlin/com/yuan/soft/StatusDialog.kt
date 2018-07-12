@@ -2,10 +2,11 @@ package com.yuan.soft
 
 import android.app.Dialog
 import android.content.Context
+import android.os.Bundle
 import android.widget.ProgressBar
 import android.widget.TextView
 
-class StatusDialog(context: Context, layoutId: Int) : Dialog(context, layoutId) {
+class StatusDialog(context: Context, theme: Int) : Dialog(context, theme) {
     val progressBar by lazy {
         findViewById(R.id.progressBar) as ProgressBar
     }
@@ -15,5 +16,10 @@ class StatusDialog(context: Context, layoutId: Int) : Dialog(context, layoutId) 
 
     init {
 
+    }
+
+    override fun onCreate(bundle: Bundle?) {
+        super.onCreate(bundle)
+        setContentView(R.layout.status_dialog)
     }
 }

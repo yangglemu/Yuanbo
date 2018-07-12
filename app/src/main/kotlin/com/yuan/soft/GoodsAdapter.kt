@@ -1,7 +1,6 @@
 package com.yuan.soft
 
 import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -10,7 +9,7 @@ import java.util.*
 /**
  * Created by yuan on 2016/6/17.
  */
-class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(context, sqlite) {
+class GoodsAdapter(context: MainActivity, db: SQLiteDatabase) : DataAdapter(context, db) {
 
     override fun initData() {
         val cursor = db.rawQuery("select tm,sl,tm*sl as je,shop from goods order by shop,tm asc", null)
@@ -28,7 +27,7 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
             map["id"] = (id++).toString()
             map["tm"] = tm.toString()
             map["sl"] = sl.toString()
-            map["je"] = decimalFormatter.format(je)
+            map["je"] = je.toString()
             map["shop"] = DataAdapter.shops[shop]!!
             mData.add(map)
         }
@@ -37,12 +36,12 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
 
     override fun compute() {
         val sum_sl = mData.sumBy { it["sl"]!!.toInt() }
-        val sum_je = mData.sumBy { decimalFormatter.parse(it["je"]).toInt() }
+        val sum_je = mData.sumBy { it["je"]!!.toInt() }
         val map = HashMap<String, String>()
         map["id"] = "合计"
         map["tm"] = ""
         map["sl"] = sum_sl.toString()
-        map["je"] = decimalFormatter.format(sum_je)
+        map["je"] = sum_je.toString()
         map["shop"] = ""
         mData.add(map)
     }
@@ -55,7 +54,6 @@ class GoodsAdapter(context: MainActivity, sqlite: SQLiteDatabase) : DataAdapter(
         setClick(tm, "tm")
         setClick(sl, "sl")
         setClick(je, "je")
-        //setClick(shop, "shop")
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {

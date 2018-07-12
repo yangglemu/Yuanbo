@@ -32,7 +32,7 @@ class SaleDayAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date?
             map["id"] = (id++).toString()
             map["rq"] = c.getString(0)
             map["sl"] = c.getString(1)
-            map["je"] = decimalFormatter.format(c.getInt(2))
+            map["je"] = c.getString(2)
             map["shop"] = DataAdapter.shops[c.getString(3)]!!
             mData.add(map)
         }
@@ -41,12 +41,12 @@ class SaleDayAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date?
 
     override fun compute() {
         val sum_sl = mData.sumBy { it["sl"]!!.toInt() }
-        val sum_je = mData.sumBy { decimalFormatter.parse(it["je"]).toInt() }
+        val sum_je = mData.sumBy { it["je"]!!.toInt() }
         val m = HashMap<String, String>()
         m["id"] = "合计"
         m["rq"] = "汇总天数:${mData.size}"
         m["sl"] = sum_sl.toString()
-        m["je"] = decimalFormatter.format(sum_je)
+        m["je"] = sum_je.toString()
         mData.add(m)
     }
 

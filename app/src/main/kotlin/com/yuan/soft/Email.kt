@@ -50,6 +50,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         folder.open(Folder.READ_WRITE)
         val total = folder.messages.size
         var read = 0
+        var newCount = 0
         //var newShop = 0
         for (msg in folder.messages) {
             read++
@@ -69,6 +70,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
             }
             val uid = folder.getUID(msg)
             if (isNewMessage(uid)) {
+                newCount++
                 insertIntoDatabase(msg.content.toString(), buffer[1])
                 db.execSQL("insert into mail(uid,rq) values('$uid','${buffer[1]}')")
             }
@@ -77,6 +79,8 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         store.close()
         val m = android.os.Message()
         m.what = 2
+        m.arg1 = total
+        m.arg2 = newCount
         handler.sendMessage(m)
     }
 

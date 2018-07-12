@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.provider.ContactsContract
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,8 +17,10 @@ import android.widget.Switch
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.yuan.soft.R.id.db
+import com.yuan.soft.R.style.statusDialog
 import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : Activity() {
     val db: SQLiteDatabase by lazy {
@@ -35,6 +39,7 @@ class MainActivity : Activity() {
 
     companion object {
         var formatString = "yyyy-MM-dd"
+        var listShops = ArrayList<String>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,9 +52,32 @@ class MainActivity : Activity() {
         mainLayout.removeAllViews()
         listLayout = layoutInflater.inflate(layoutId, null)
         listView = listLayout.findViewById(listViewId) as ListView
+        registerForContextMenu(listView)
         listView.adapter = adapter
         adapter.setSort(listLayout)
         mainLayout.addView(listLayout)
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        if (menu != null) {
+            menu.setHeaderTitle("门店过滤")
+            var index = 0
+            listShops.clear()
+            for (pair in DataAdapter.shops) {
+                menu.add(0, index, 0, pair.value)
+                listShops.add(pair.value)
+                index++
+            }
+            menu.add(0, index, 0, "全部显示")
+            listShops.add("全部显示")
+        }
+    }
+
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+        if (item == null) return true
+        toast(listShops[item.itemId])
+        return super.onContextItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -61,36 +89,36 @@ class MainActivity : Activity() {
         when (item.itemId) {
             R.id.sp -> {
                 createListLayout(R.layout.goods, R.id.listView_goods, GoodsAdapter(this, db))
-                toast("商品资料")
+                toast("商品库存")
             }
             R.id.mx -> {
                 val date = Date()
                 createListLayout(R.layout.sale_mx, R.id.listView_sale_mx, SaleMXAdapter(this, db, date, date))
-                toast("本日销售明细")
+                toast("本日销售商品明细")
             }
             R.id.db -> {
                 val date = Date()
                 val adapter = SaleDBAdapter(this, db, date, date)
                 createListLayout(R.layout.sale_db, R.id.listView_sale_db, adapter)
-                toast("本日销售单笔")
+                toast("本日销售单笔明细")
             }
             R.id.fl -> {
                 val date = Date()
                 val adapter = SaleFLAdapter(this, db, date, date)
                 createListLayout(R.layout.sale_fl, R.id.listView_sale_fl, adapter)
-                toast("本日分类汇总")
+                toast("本日销售商品分类汇总")
             }
             R.id.day -> {
                 val adapter = SaleDayAdapter(this, db)
                 createListLayout(R.layout.sale_day, R.id.listView_sale_day, adapter)
-                toast("本月按天汇总")
+                toast("本日按天汇总")
             }
             R.id.rq_mx -> {
                 MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
                     override fun postMessage(start: Date, end: Date) {
                         val sale_mx = SaleMXAdapter(this@MainActivity, db, start, end)
                         createListLayout(R.layout.sale_mx, R.id.listView_sale_mx, sale_mx)
-                        toast("选择日期:销售明细")
+                        toast("选择日期:销售商品明细")
                     }
                 }).show()
             }
@@ -99,7 +127,7 @@ class MainActivity : Activity() {
                     override fun postMessage(start: Date, end: Date) {
                         val adapter = SaleDBAdapter(this@MainActivity, db, start, end)
                         createListLayout(R.layout.sale_db, R.id.listView_sale_db, adapter)
-                        toast("选择日期:销售单笔")
+                        toast("选择日期:销售单笔明细")
                     }
                 }).show()
             }
@@ -108,7 +136,7 @@ class MainActivity : Activity() {
                     override fun postMessage(start: Date, end: Date) {
                         val sale_fl = SaleFLAdapter(this@MainActivity, db, start, end)
                         createListLayout(R.layout.sale_fl, R.id.listView_sale_fl, sale_fl)
-                        toast("选择日期:分类汇总")
+                        toast("选择日期:销售商品分类汇总")
                     }
                 }).show()
             }
@@ -122,7 +150,7 @@ class MainActivity : Activity() {
                 }).show()
             }
             R.id.refresh -> {
-                statusDialog = StatusDialog(this, R.layout.status_dialog)
+                statusDialog = StatusDialog(this, R.style.statusDialog)
                 statusDialog!!.show()
                 Thread(Runnable {
                     email.receive(myHandler)
@@ -158,6 +186,7 @@ class MainActivity : Activity() {
                     2 -> {
                         activity.statusDialog?.dismiss()
                         activity.statusDialog = null
+                        activity.toast("共处理邮件 ${msg.arg1}，其中新邮件 ${msg.arg2}")
                     }
                 }
             }
