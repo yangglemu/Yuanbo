@@ -16,7 +16,6 @@ class StatusDialog(context: Context, theme: Int) : Dialog(context, theme) {
     }
 
     init {
-
     }
 
     override fun onCreate(bundle: Bundle?) {

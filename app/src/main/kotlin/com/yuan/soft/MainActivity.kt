@@ -3,14 +3,12 @@ package com.yuan.soft
 import android.app.Activity
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
+import android.graphics.Point
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.util.Log
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
@@ -157,7 +155,11 @@ class MainActivity : Activity() {
             R.id.refresh -> {
                 try {
                     statusDialog = StatusDialog(this, R.style.statusDialog)
-                    statusDialog?.show()
+                    statusDialog!!.show()
+                    val lp = statusDialog!!.window.attributes
+                    lp.width = windowManager.defaultDisplay.width
+                    //lp.alpha = 0.7F
+                    statusDialog!!.window.attributes = lp
                     Thread(Runnable {
                         email.receive(myHandler)
                     }).start()
