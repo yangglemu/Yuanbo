@@ -24,7 +24,7 @@ class SaleFLAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
         while (c.moveToNext()) {
             val map = HashMap<String, String>()
             map["id"] = (id++).toString()
-            map["rq"] = c.getString(0).substring(2)
+            map["rq"] = c.getString(0).substring(2,16)
             map["tm"] = c.getString(1)
             map["sl"] = c.getString(2)
             map["je"] = c.getString(3)

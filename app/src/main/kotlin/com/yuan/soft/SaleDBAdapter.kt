@@ -24,7 +24,7 @@ class SaleDBAdapter(context: MainActivity, db: SQLiteDatabase, start: Date, end:
         while (c.moveToNext()) {
             val map = HashMap<String, String>()
             map["id"] = (id++).toString()
-            map["rq"] = c.getString(0).substring(2)
+            map["rq"] = c.getString(0).substring(2,16)
             map["sl"] = c.getString(1)
             map["je"] = c.getString(2)
             map["ss"] = c.getString(3)

@@ -6,14 +6,17 @@ import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
+import com.yuan.soft.R.id.db
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -41,7 +44,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        createListLayout(R.layout.goods, R.id.listView_goods, GoodsAdapter(this, db))
+        createListLayout(R.layout.sale_day, R.id.listView_sale_day, SaleDayAdapter(this, db))
     }
 
     fun createListLayout(layoutId: Int, listViewId: Int, adapter: DataAdapter) {
@@ -114,8 +117,8 @@ class MainActivity : Activity() {
             R.id.rq_mx -> {
                 MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
                     override fun postMessage(start: Date, end: Date) {
-                        val sale_mx = SaleMXAdapter(this@MainActivity, db, start, end)
-                        createListLayout(R.layout.sale_mx, R.id.listView_sale_mx, sale_mx)
+                        val mx = SaleMXAdapter(this@MainActivity, db, start, end)
+                        createListLayout(R.layout.sale_mx, R.id.listView_sale_mx, mx)
                         toast("选择日期:销售商品明细")
                     }
                 }).show()
@@ -132,8 +135,8 @@ class MainActivity : Activity() {
             R.id.rq_fl -> {
                 MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
                     override fun postMessage(start: Date, end: Date) {
-                        val sale_fl = SaleFLAdapter(this@MainActivity, db, start, end)
-                        createListLayout(R.layout.sale_fl, R.id.listView_sale_fl, sale_fl)
+                        val fl = SaleFLAdapter(this@MainActivity, db, start, end)
+                        createListLayout(R.layout.sale_fl, R.id.listView_sale_fl, fl)
                         toast("选择日期:销售商品分类汇总")
                     }
                 }).show()
@@ -141,18 +144,26 @@ class MainActivity : Activity() {
             R.id.rq_day -> {
                 MyDatePicker(this, R.style.datePickerDialog, object : IPostMessage {
                     override fun postMessage(start: Date, end: Date) {
-                        val sale_day = SaleDayAdapter(this@MainActivity, db, start, end)
-                        createListLayout(R.layout.sale_day, R.id.listView_sale_day, sale_day)
+                        val day = SaleDayAdapter(this@MainActivity, db, start, end)
+                        createListLayout(R.layout.sale_day, R.id.listView_sale_day, day)
                         toast("选择日期:按天汇总")
                     }
                 }).show()
             }
+            R.id.shops -> {
+                createListLayout(R.layout.shops, R.id.listView_shops, ShopsAdapter(this, db))
+                toast("查看所有门店")
+            }
             R.id.refresh -> {
-                statusDialog = StatusDialog(this, R.style.statusDialog)
-                statusDialog!!.show()
-                Thread(Runnable {
-                    email.receive(myHandler)
-                }).start()
+                try {
+                    statusDialog = StatusDialog(this, R.style.statusDialog)
+                    statusDialog?.show()
+                    Thread(Runnable {
+                        email.receive(myHandler)
+                    }).start()
+                } catch (e: Exception) {
+                    toast(e.message!!)
+                }
             }
             R.id.exit -> finish()
             else -> return false
@@ -168,24 +179,28 @@ class MainActivity : Activity() {
 
     class MyHandler(activity: MainActivity) : Handler() {
         private val mActivity: WeakReference<MainActivity> = WeakReference(activity)
+        private var total: Int = 0
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
-            val activity = mActivity.get()
-            if (activity != null) {
-                when (msg?.what) {
-                    1 -> {
-                        val bar = activity.statusDialog!!.progressBar
-                        val label = activity.statusDialog!!.label
-                        //msg.arg1:total, msg.arg2:done
-                        val present = msg.arg2.toFloat() / msg.arg1.toFloat() * 100.0
-                        bar.progress = present.toInt()
-                        label.text = "处理邮件：${msg.arg1}/${msg.arg2}"
-                    }
-                    2 -> {
-                        activity.statusDialog?.dismiss()
-                        activity.statusDialog = null
-                        activity.toast("共处理邮件 ${msg.arg1}，其中新邮件 ${msg.arg2}")
-                    }
+            val activity = mActivity.get()!!
+            when (msg?.what) {
+                -11 -> {
+                    total = msg.arg1
+                    activity.statusDialog!!.progressBar.max = total
+                    activity.statusDialog!!.label.text = "处理邮件：$total / 0}"
+                    activity.statusDialog!!.progressBar.progress = 0
+                }
+                1 -> {
+                    val bar = activity.statusDialog!!.progressBar
+                    val label = activity.statusDialog!!.label
+                    //msg.arg2:total, msg.arg1:done
+                    label.text = "处理邮件：$total / ${msg.arg1}"
+                    bar.progress = msg.arg1
+                }
+                2 -> {
+                    activity.statusDialog?.dismiss()
+                    activity.statusDialog = null
+                    activity.toast("共处理邮件 ${total}，其中新邮件 ${msg.arg1}")
                 }
             }
         }

@@ -14,8 +14,8 @@ import kotlin.collections.HashMap
  * Created by yuan on 2016/6/16.
  */
 abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var start: Date? = null, var end: Date? = null) : BaseAdapter() {
-    private val mContext = context
-    val mInflater = LayoutInflater.from(mContext)!!
+    //private val mContext = context
+    val mInflater = LayoutInflater.from(context)!!
     var mData = mutableListOf<HashMap<String, String>>()
     var mData2: MutableList<HashMap<String, String>> = mData
     val db = sqlite

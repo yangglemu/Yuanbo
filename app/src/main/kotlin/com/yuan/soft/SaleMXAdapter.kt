@@ -19,7 +19,7 @@ class SaleMXAdapter(context: MainActivity, sqlite: SQLiteDatabase, start: Date, 
         while (c.moveToNext()) {
             val m = HashMap<String, String>()
             m["id"] = (id++).toString()
-            m["rq"] = c.getString(0).substring(2)
+            m["rq"] = c.getString(0).substring(2,16)
             m["tm"] = c.getString(1)
             m["sl"] = c.getString(2)
             m["zq"] = c.getString(3)

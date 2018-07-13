@@ -7,61 +7,50 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/colorLine"/>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content">
         <View style="@style/verLine_header"/>
         <TextView
-                android:id="@+id/sale_db_header_id"
+                android:id="@+id/shops_header_id"
                 style="@style/listHeaderStyle"
                 android:layout_weight="0.6"
                 android:text="行号"/>
         <View style="@style/verLine_header"/>
         <TextView
-                android:id="@+id/sale_db_header_rq"
+                android:id="@+id/shops_header_name"
                 style="@style/listHeaderStyle"
-                android:layout_weight="1.7"
-                android:text="日期"/>
+                android:layout_weight="1.2"
+                android:text="店名"/>
         <View style="@style/verLine_header"/>
         <TextView
-                android:id="@+id/sale_db_header_sl"
+                android:id="@+id/shops_header_pname"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.6"
-                android:text="数量"/>
+                android:layout_weight="0.8"
+                android:text="代码"/>
         <View style="@style/verLine_header"/>
         <TextView
-                android:id="@+id/sale_db_header_je"
+                android:id="@+id/shops_header_tel"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.6"
-                android:text="金额 "/>
+                android:layout_weight="1.4"
+                android:text="电话"/>
         <View style="@style/verLine_header"/>
         <TextView
-                android:id="@+id/sale_db_header_ss"
+                android:id="@+id/shops_header_address"
                 style="@style/listHeaderStyle"
-                android:layout_weight="0.6"
-                android:text="实收 "/>
+                android:layout_weight="1"
+                android:text="地址"/>
         <View style="@style/verLine_header"/>
-        <TextView
-                android:id="@+id/sale_db_header_zl"
-                style="@style/listHeaderStyle"
-                android:layout_weight="0.6"
-                android:text="找零"/>
-        <View style="@style/verLine_header"/>
-        <TextView
-                android:id="@+id/sale_db_header_shop"
-                style="@style/listHeaderStyle"
-                android:layout_weight="1.3"
-                android:text="门店 "/>
-        <View style="@style/verLine_header"/>
-
     </LinearLayout>
+
     <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/colorLine"/>
     <ListView
-            android:id="@+id/listView_sale_db"
+            android:id="@+id/listView_shops"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:dividerHeight="0.5dp"

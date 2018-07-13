@@ -49,14 +49,17 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         val folder = store.getFolder("INBOX") as POP3Folder
         folder.open(Folder.READ_WRITE)
         val total = folder.messages.size
+        val msg = android.os.Message()
+        msg.what = -11
+        msg.arg1 = total
+        handler.sendMessage(msg)
         var read = 0
         var newCount = 0
         //var newShop = 0
         for (msg in folder.messages) {
             read++
             val message = android.os.Message()
-            message.arg1 = total
-            message.arg2 = read
+            message.arg1 = read
             message.what = 1
             handler.sendMessage(message)
             val buffer = msg.subject.split('@')
@@ -79,8 +82,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         store.close()
         val m = android.os.Message()
         m.what = 2
-        m.arg1 = total
-        m.arg2 = newCount
+        m.arg1 = newCount
         handler.sendMessage(m)
     }
 

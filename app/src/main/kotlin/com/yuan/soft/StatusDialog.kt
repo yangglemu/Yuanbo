@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.ProgressBar
 import android.widget.TextView
+import kotlin.math.max
 
 class StatusDialog(context: Context, theme: Int) : Dialog(context, theme) {
     val progressBar by lazy {
@@ -21,5 +22,9 @@ class StatusDialog(context: Context, theme: Int) : Dialog(context, theme) {
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         setContentView(R.layout.status_dialog)
+        setCancelable(false)
+        progressBar.isIndeterminate = false
+        progressBar.max = 100
+        progressBar.progress = 0
     }
 }

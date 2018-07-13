@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+    <View style="@style/verLine_header"/>
+    <TextView
+            android:id="@+id/shops_item_id"
+            style="@style/listHeaderStyle"
+            android:layout_weight="0.6"
+            android:text="行号"/>
+    <View style="@style/verLine_header"/>
+    <TextView
+            android:id="@+id/shops_item_name"
+            style="@style/listHeaderStyle"
+            android:layout_weight="1.2"
+            android:text="店名"/>
+    <View style="@style/verLine_header"/>
+    <TextView
+            android:id="@+id/shops_item_pname"
+            style="@style/listHeaderStyle"
+            android:layout_weight="0.8"
+            android:text="代码"/>
+    <View style="@style/verLine_header"/>
+    <TextView
+            android:id="@+id/shops_item_tel"
+            style="@style/listHeaderStyle"
+            android:layout_weight="1.4"
+            android:text="电话"/>
+    <View style="@style/verLine_header"/>
+    <TextView
+            android:id="@+id/shops_item_address"
+            style="@style/listHeaderStyle"
+            android:layout_weight="1"
+            android:text="地址"/>
+    <View style="@style/verLine_header"/>
+
+</LinearLayout>
