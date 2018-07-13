@@ -88,7 +88,7 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
                 else -> {
                 }
             }
-            for (index in 0 until mData.size) {
+            for (index in mData.indices) {
                 mData[index]["id"] = (index + 1).toString()
             }
             mData.add(lastMap)
@@ -98,6 +98,9 @@ abstract class DataAdapter(context: MainActivity, sqlite: SQLiteDatabase, var st
 
     fun filter(shopName: String) {
         mData = if (shopName.contains("全部")) {
+            if (mData2.last()["shop"].isNullOrEmpty()) {
+                mData2.remove(mData2.last())
+            }
             mData2
         } else {
             mData2.filter {

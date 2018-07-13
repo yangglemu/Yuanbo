@@ -6,21 +6,16 @@ import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.provider.ContactsContract
 import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.Switch
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
-import com.yuan.soft.R.id.db
-import com.yuan.soft.R.style.statusDialog
 import java.lang.ref.WeakReference
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : Activity() {
     val db: SQLiteDatabase by lazy {
@@ -35,11 +30,12 @@ class MainActivity : Activity() {
 
     lateinit var listLayout: View
     lateinit var listView: ListView
+    lateinit var mAdapter: DataAdapter
     var statusDialog: StatusDialog? = null
 
     companion object {
         var formatString = "yyyy-MM-dd"
-        var listShops = ArrayList<String>()
+        var listShops = mutableListOf<String>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +52,7 @@ class MainActivity : Activity() {
         listView.adapter = adapter
         adapter.setSort(listLayout)
         mainLayout.addView(listLayout)
+        mAdapter = adapter
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -76,6 +73,7 @@ class MainActivity : Activity() {
 
     override fun onContextItemSelected(item: MenuItem?): Boolean {
         if (item == null) return true
+        mAdapter.filter(listShops[item.itemId])
         toast(listShops[item.itemId])
         return super.onContextItemSelected(item)
     }
@@ -193,7 +191,6 @@ class MainActivity : Activity() {
         }
     }
 
-
     override fun onDestroy() {
         val c = Calendar.getInstance(Locale.CHINA)
         c.time = Date()
@@ -211,6 +208,6 @@ class MainActivity : Activity() {
     }
 
     interface IPostMessage {
-        fun postMessage(start: Date, end: Date): Unit
+        fun postMessage(start: Date, end: Date)
     }
 }
