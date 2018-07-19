@@ -189,13 +189,12 @@ class MainActivity : Activity() {
                 -11 -> {
                     total = msg.arg1
                     activity.statusDialog!!.progressBar.max = total
-                    activity.statusDialog!!.label.text = "处理邮件：$total / 0}"
                     activity.statusDialog!!.progressBar.progress = 0
+                    activity.statusDialog!!.label.text = "处理邮件：$total / 0}"
                 }
                 1 -> {
                     val bar = activity.statusDialog!!.progressBar
                     val label = activity.statusDialog!!.label
-                    //msg.arg2:total, msg.arg1:done
                     label.text = "处理邮件：$total / ${msg.arg1}"
                     bar.progress = msg.arg1
                 }

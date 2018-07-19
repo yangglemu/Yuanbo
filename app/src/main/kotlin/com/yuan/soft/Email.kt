@@ -18,7 +18,7 @@ fun Date.toString(formatString: String): String {
 }
 
 class Email(val context: Context, val db: SQLiteDatabase) {
-    private val diff = 1000L * 60 * 60 * 24 * 7
+    private val diff = 1000L * 60 * 60 * 24 * 10
 
     companion object {
         const val pop3Host = "pop.126.com"
@@ -48,10 +48,10 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         val folder = store.getFolder("INBOX") as POP3Folder
         folder.open(Folder.READ_WRITE)
         val total = folder.messages.size
-        val msg = android.os.Message()
-        msg.what = -11
-        msg.arg1 = total
-        handler.sendMessage(msg)
+        val msg0 = android.os.Message()
+        msg0.what = -11
+        msg0.arg1 = total
+        handler.sendMessage(msg0)
         var read = 0
         var newCount = 0
         //var newShop = 0
@@ -143,8 +143,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
     private fun string2Document(content: String): Document {
         val reader = StringReader(content)
         val stream = InputSource(reader)
-        val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream)
-        return doc
+        return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream)
     }
 
     private fun isInShops(shop: String): Boolean {
