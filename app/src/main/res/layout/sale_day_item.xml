@@ -29,7 +29,6 @@
     <TextView
             android:id="@+id/sale_day_shop"
             style="@style/listItemStyle"
-            android:layout_weight="1.4"
-            android:text="门店"/>
-    <View style="@style/verLine_header"/>
+            android:layout_weight="1.4"/>
+    <View style="@style/verLine_item"/>
 </LinearLayout>
