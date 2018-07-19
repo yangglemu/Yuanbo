@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/IdeaProjects-Yuanbo.iml" filepath="$PROJECT_DIR$/IdeaProjects-Yuanbo.iml" />
       <module fileurl="file://$PROJECT_DIR$/Yuanbo.iml" filepath="$PROJECT_DIR$/Yuanbo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/Yuanbo-app.iml" filepath="$PROJECT_DIR$/app/Yuanbo-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

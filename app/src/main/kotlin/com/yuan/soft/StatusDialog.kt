@@ -5,14 +5,13 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.ProgressBar
 import android.widget.TextView
-import kotlin.math.max
 
 class StatusDialog(context: Context, theme: Int) : Dialog(context, theme) {
-    val progressBar by lazy {
-        findViewById(R.id.progressBar) as ProgressBar
+    val progressBar: ProgressBar by lazy {
+        findViewById<ProgressBar>(R.id.progressBar)
     }
-    val label by lazy {
-        findViewById(R.id.label) as TextView
+    val label: TextView by lazy {
+        findViewById<TextView>(R.id.label)
     }
 
     init {

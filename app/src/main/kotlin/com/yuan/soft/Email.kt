@@ -2,18 +2,14 @@ package com.yuan.soft
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import com.sun.mail.pop3.POP3Folder
-import com.yuan.soft.R.id.db
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.logging.Handler
 import javax.mail.Flags
 import javax.mail.Folder
-import javax.mail.Message
 import javax.mail.Session
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -22,12 +18,15 @@ fun Date.toString(formatString: String): String {
 }
 
 class Email(val context: Context, val db: SQLiteDatabase) {
+    private val diff = 1000L * 60 * 60 * 24 * 7
+
     companion object {
         const val pop3Host = "pop.126.com"
         const val pop3Port = "110"
         const val username = "yangglemu"
         const val password = "yuanbo132"
         val shops = HashMap<String, String>()
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
     }
 
     init {
@@ -70,6 +69,9 @@ class Email(val context: Context, val db: SQLiteDatabase) {
             if (!isInShops(buffer[0])) {
                 //newShop++
                 continue
+            }
+            if (isOutOfDate(dateFormatter.parse(buffer[1]))) {
+                msg.setFlag(Flags.Flag.DELETED, true)
             }
             val uid = folder.getUID(msg)
             if (isNewMessage(uid)) {
@@ -165,5 +167,10 @@ class Email(val context: Context, val db: SQLiteDatabase) {
         }
         cursor.close()
         return value
+    }
+
+    private fun isOutOfDate(date: Date): Boolean {
+        if (Date().time - date.time > diff) return true
+        return false
     }
 }
