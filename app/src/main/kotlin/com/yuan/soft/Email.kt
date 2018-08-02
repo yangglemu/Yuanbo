@@ -80,7 +80,7 @@ class Email(val context: Context, val db: SQLiteDatabase) {
                 db.execSQL("insert into mail(uid,rq) values('$uid','${buffer[1]}')")
             }
         }
-        folder.close(false)
+        folder.close(true)
         store.close()
         val m = android.os.Message()
         m.what = 2
